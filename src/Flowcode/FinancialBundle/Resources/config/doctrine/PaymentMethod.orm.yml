@@ -1,8 +1,0 @@
-Flowcode\FinancialBundle\Model\Payment\PaymentMethod:
-    type: mappedSuperclass
-
-    fields:
-        name:
-            type: string
-            length: 255
-    lifecycleCallbacks: {  }

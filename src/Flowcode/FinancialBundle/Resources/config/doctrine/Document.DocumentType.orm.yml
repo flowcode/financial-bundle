@@ -1,0 +1,12 @@
+Flowcode\FinancialBundle\Entity\Document\DocumentType:
+    type: mappedSuperclass
+
+    fields:
+        name:
+            type: string
+            length: 255
+        code:
+            type: string
+            length: 255
+            nullable: true
+    lifecycleCallbacks: {  }

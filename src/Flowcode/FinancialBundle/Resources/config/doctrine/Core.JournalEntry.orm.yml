@@ -1,0 +1,30 @@
+Flowcode\FinancialBundle\Entity\Core\JournalEntry:
+    type: mappedSuperclass
+
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+
+    fields:
+        debit:
+            type: float
+        credit:
+            type: float
+        date:
+            type: datetime
+
+    manyToOne:
+        transaction:
+            targetEntity: Flowcode\FinancialBundle\Model\Core\TransactionInterface
+            joinColumn:
+                name: transaction_id
+                referencedColumnName: id
+
+        account:
+            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+            joinColumn:
+                name: account_id
+                referencedColumnName: id
+
+    lifecycleCallbacks: {  }

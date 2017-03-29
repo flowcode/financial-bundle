@@ -1,0 +1,10 @@
+Flowcode\FinancialBundle\Entity\Payment\Expense:
+
+    type: mappedSuperclass
+
+    fields:
+        name:
+            type: string
+            length: 255
+
+    lifecycleCallbacks: {  }

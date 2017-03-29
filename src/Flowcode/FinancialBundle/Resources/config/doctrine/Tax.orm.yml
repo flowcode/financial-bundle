@@ -1,4 +1,4 @@
-Flowcode\FinancialBundle\Model\Tax:
+Flowcode\FinancialBundle\Entity\Tax:
     type: mappedSuperclass
 
     fields:

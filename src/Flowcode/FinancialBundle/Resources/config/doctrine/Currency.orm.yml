@@ -1,8 +1,0 @@
-Flowcode\FinancialBundle\Model\Currency\Currency:
-    type: mappedSuperclass
-
-    fields:
-        name:
-            type: string
-            length: 255
-    lifecycleCallbacks: {  }
