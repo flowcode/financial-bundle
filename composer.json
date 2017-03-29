@@ -1,0 +1,17 @@
+{
+  "name": "flowcode/financial-bundle",
+  "description": "Basic finances and accounting",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Juan Manuel Aguero",
+      "email": "juanma.aguero@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  },
+  "require": {}
+}

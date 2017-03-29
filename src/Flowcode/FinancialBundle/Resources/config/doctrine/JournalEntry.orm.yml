@@ -1,0 +1,27 @@
+Flowcode\FinancialBundle\Model\Core\JournalEntry:
+    type: mappedSuperclass
+
+    fields:
+        debit:
+            type: float
+        credit:
+            type: float
+        date:
+            type: datetime
+
+    manyToOne:
+        transaction:
+            targetEntity: TransactionInterface
+            joinColumn:
+                name: transaction_id
+                referencedColumnName: id
+                inversedBy: journalEntries
+
+        account:
+            targetEntity: AccountInterface
+            joinColumn:
+                name: account_id
+                referencedColumnName: id
+                inversedBy: journalEntries
+
+    lifecycleCallbacks: {  }

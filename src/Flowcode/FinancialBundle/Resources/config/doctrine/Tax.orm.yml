@@ -1,0 +1,17 @@
+Flowcode\FinancialBundle\Model\Tax:
+    type: mappedSuperclass
+
+    fields:
+        name:
+            type: string
+            length: 255
+        rate:
+            type: float
+        forSale:
+            type: boolean
+        forPurchase:
+            type: boolean
+        description:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

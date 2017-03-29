@@ -1,0 +1,9 @@
+Flowcode\FinancialBundle\Model\Document\DocumentItemTax:
+    type: mappedSuperclass
+
+    fields:
+        rate:
+            type: float
+        amount:
+            type: float
+    lifecycleCallbacks: {  }

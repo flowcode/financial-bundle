@@ -1,0 +1,10 @@
+Flowcode\FinancialBundle\Model\Payment\Payment:
+    type: mappedSuperclass
+
+    fields:
+        type:
+            type: string
+            length: 255
+        amount:
+            type: float
+    lifecycleCallbacks: {  }
