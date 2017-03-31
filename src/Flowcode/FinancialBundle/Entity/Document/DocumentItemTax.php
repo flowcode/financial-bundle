@@ -2,6 +2,9 @@
 
 namespace Flowcode\FinancialBundle\Entity\Document;
 
+use Flowcode\FinancialBundle\Model\Document\DocumentItemInterface;
+use Flowcode\FinancialBundle\Model\TaxInterface;
+
 /**
  * DocumentItemTax
  */
@@ -10,17 +13,27 @@ abstract class DocumentItemTax
     /**
      * @var int
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @var DocumentItemInterface
+     */
+    protected $documentItem;
+
+    /**
+     * @var TaxInterface
+     */
+    protected $tax;
 
     /**
      * @var float
      */
-    private $rate;
+    protected $rate;
 
     /**
      * @var float
      */
-    private $amount;
+    protected $amount;
 
 
     /**
@@ -80,5 +93,39 @@ abstract class DocumentItemTax
     {
         return $this->amount;
     }
+
+    /**
+     * @return DocumentItemInterface
+     */
+    public function getDocumentItem(): DocumentItemInterface
+    {
+        return $this->documentItem;
+    }
+
+    /**
+     * @param DocumentItemInterface $documentItem
+     */
+    public function setDocumentItem(DocumentItemInterface $documentItem)
+    {
+        $this->documentItem = $documentItem;
+    }
+
+    /**
+     * @return TaxInterface
+     */
+    public function getTax(): TaxInterface
+    {
+        return $this->tax;
+    }
+
+    /**
+     * @param TaxInterface $tax
+     */
+    public function setTax(TaxInterface $tax)
+    {
+        $this->tax = $tax;
+    }
+
+
 }
 

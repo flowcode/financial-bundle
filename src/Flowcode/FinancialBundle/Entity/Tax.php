@@ -5,7 +5,7 @@ namespace Flowcode\FinancialBundle\Entity;
 /**
  * Tax
  */
-class Tax
+abstract class Tax
 {
     /**
      * @var int
@@ -63,9 +63,7 @@ class Tax
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {

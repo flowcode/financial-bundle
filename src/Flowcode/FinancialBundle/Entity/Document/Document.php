@@ -2,6 +2,8 @@
 
 namespace Flowcode\FinancialBundle\Entity\Document;
 
+use Flowcode\FinancialBundle\Model\Document\DocumentTypeInterface;
+
 /**
  * Document
  */
@@ -10,42 +12,47 @@ abstract class Document
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $code;
+    protected $code;
+
+    /**
+     * @var DocumentTypeInterface
+     */
+    protected $type;
 
     /**
      * @var string
      */
-    private $subType;
+    protected $subType;
 
     /**
      * @var \DateTime
      */
-    private $date;
+    protected $date;
 
     /**
      * @var float
      */
-    private $balance;
+    protected $balance;
 
     /**
      * @var \DateTime
      */
-    private $dueDate;
+    protected $dueDate;
 
     /**
      * @var float
      */
-    private $total;
+    protected $total;
 
     /**
      * @var float
      */
-    private $totalPayed;
+    protected $totalPayed;
 
 
     /**
@@ -225,5 +232,23 @@ abstract class Document
     {
         return $this->totalPayed;
     }
+
+    /**
+     * @return DocumentTypeInterface
+     */
+    public function getType(): DocumentTypeInterface
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param DocumentTypeInterface $type
+     */
+    public function setType(DocumentTypeInterface $type)
+    {
+        $this->type = $type;
+    }
+
+
 }
 

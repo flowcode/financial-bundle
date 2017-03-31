@@ -1,6 +1,6 @@
 <?php
 
-namespace Flowcode\FinancialBundle\Entity\Currency;
+namespace Flowcode\FinancialBundle\Model\Currency;
 
 
 interface CurrencyInterface

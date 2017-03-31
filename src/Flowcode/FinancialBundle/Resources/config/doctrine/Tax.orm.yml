@@ -1,6 +1,11 @@
 Flowcode\FinancialBundle\Entity\Tax:
     type: mappedSuperclass
 
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+
     fields:
         name:
             type: string
@@ -14,4 +19,5 @@ Flowcode\FinancialBundle\Entity\Tax:
         description:
             type: string
             length: 255
+
     lifecycleCallbacks: {  }

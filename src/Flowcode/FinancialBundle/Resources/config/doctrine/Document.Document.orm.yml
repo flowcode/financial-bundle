@@ -1,6 +1,11 @@
 Flowcode\FinancialBundle\Entity\Document\Document:
     type: mappedSuperclass
 
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+
     fields:
         code:
             type: string
@@ -22,4 +27,13 @@ Flowcode\FinancialBundle\Entity\Document\Document:
         totalPayed:
             type: float
             nullable: true
+
+    manyToOne:
+
+        type:
+            targetEntity: Flowcode\FinancialBundle\Model\Document\DocumentTypeInterface
+            joinColumn:
+                name: document_type_id
+                referencedColumnName: id
+
     lifecycleCallbacks: {  }

@@ -1,9 +1,30 @@
 Flowcode\FinancialBundle\Entity\Document\DocumentItemTax:
     type: mappedSuperclass
 
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+
     fields:
         rate:
             type: float
         amount:
             type: float
+
+
+    manyToOne:
+
+        documentItem:
+            targetEntity: Flowcode\FinancialBundle\Model\Document\DocumentItemInterface
+            joinColumn:
+                name: document_item_id
+                referencedColumnName: id
+
+        tax:
+            targetEntity: Flowcode\FinancialBundle\Model\TaxInterface
+            joinColumn:
+                name: tax_id
+                referencedColumnName: id
+
     lifecycleCallbacks: {  }

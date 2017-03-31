@@ -5,7 +5,7 @@ namespace Flowcode\FinancialBundle\Entity\Currency;
 /**
  * Currency
  */
-abstract class Currency implements CurrencyInterface
+abstract class Currency
 {
     /**
      * @var int

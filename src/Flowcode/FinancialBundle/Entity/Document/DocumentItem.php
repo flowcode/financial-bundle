@@ -2,6 +2,8 @@
 
 namespace Flowcode\FinancialBundle\Entity\Document;
 
+use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
+
 /**
  * DocumentItem
  */
@@ -10,27 +12,32 @@ abstract class DocumentItem
     /**
      * @var int
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @var DocumentInterface
+     */
+    protected $document;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var int
      */
-    private $units;
+    protected $units;
 
     /**
      * @var float
      */
-    private $unitPrice;
+    protected $unitPrice;
 
     /**
      * @var float
      */
-    private $total;
+    protected $total;
 
 
     /**
@@ -138,5 +145,23 @@ abstract class DocumentItem
     {
         return $this->total;
     }
+
+    /**
+     * @return DocumentInterface
+     */
+    public function getDocument(): DocumentInterface
+    {
+        return $this->document;
+    }
+
+    /**
+     * @param DocumentInterface $document
+     */
+    public function setDocument(DocumentInterface $document)
+    {
+        $this->document = $document;
+    }
+
+
 }
 
