@@ -2,13 +2,21 @@
 
 namespace Flowcode\FinancialBundle\Entity\Document;
 
-use Flowcode\FinancialBundle\Model\Document\DocumentTypeInterface;
+use Flowcode\FinancialBundle\Model\Document\DocumentCategoryInterface;
 
 /**
  * Document
  */
 abstract class Document
 {
+
+    const STATUS_CANCELLED = 'status_cancelled';
+    const STATUS_DRAFT = 'status_draft';
+    const STATUS_PENDING = 'status_pending';
+    const STATUS_PAID = 'status_paid';
+
+    const TYPE_CUSTOMER = 'customer';
+    const TYPE_SUPPLIER = 'supplier';
     /**
      * @var int
      */
@@ -20,10 +28,13 @@ abstract class Document
     protected $code;
 
     /**
-     * @var DocumentTypeInterface
+     * @var DocumentCategoryInterface
+     */
+    protected $category;
+    /**
+     * @var string
      */
     protected $type;
-
     /**
      * @var string
      */
@@ -36,6 +47,7 @@ abstract class Document
 
     /**
      * @var float
+     * Lo que falta que pagen. Total - total pagado.
      */
     protected $balance;
 
@@ -54,6 +66,15 @@ abstract class Document
      */
     protected $totalPayed;
 
+    /**
+     * @var string
+     */
+    protected $status;
+
+    /**
+     * @var Payment
+     */
+    protected $payments;
 
     /**
      * Get id
@@ -234,21 +255,18 @@ abstract class Document
     }
 
     /**
-     * @return DocumentTypeInterface
+     * @return DocumentCategoryInterface
      */
-    public function getType(): DocumentTypeInterface
+    public function getType(): DocumentCategoryInterface
     {
         return $this->type;
     }
 
     /**
-     * @param DocumentTypeInterface $type
+     * @param DocumentCategoryInterface $type
      */
-    public function setType(DocumentTypeInterface $type)
+    public function setType(DocumentCategoryInterface $type)
     {
         $this->type = $type;
     }
-
-
 }
-

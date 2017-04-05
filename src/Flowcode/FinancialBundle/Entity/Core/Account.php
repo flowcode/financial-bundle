@@ -3,13 +3,19 @@
 namespace Flowcode\FinancialBundle\Entity\Core;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 
 /**
  * Account
  */
-abstract class Account
+abstract class Account implements AccountInterface
 {
+    const TYPE_ASSET = 1;
+    const TYPE_LIABILITY = 2;
+    const TYPE_EQUITY = 3;
+    const TYPE_INCOME = 4;
+    const TYPE_EXPENSE = 5;
+
     /**
      * @var int
      */
@@ -188,7 +194,4 @@ abstract class Account
     {
         $this->journalEntries = $journalEntries;
     }
-
-
 }
-

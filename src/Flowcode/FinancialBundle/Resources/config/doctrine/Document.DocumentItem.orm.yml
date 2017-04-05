@@ -19,14 +19,11 @@ Flowcode\FinancialBundle\Entity\Document\DocumentItem:
             nullable: true
         total:
             type: float
-
-
     manyToOne:
-
         document:
             targetEntity: Flowcode\FinancialBundle\Model\Document\DocumentInterface
+            inversedBy: documentItems
             joinColumn:
                 name: document_id
                 referencedColumnName: id
-
     lifecycleCallbacks: {  }

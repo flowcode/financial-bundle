@@ -30,12 +30,18 @@ abstract class DocumentItem
     protected $units;
 
     /**
+     * @var TaxInterface
+     */
+    protected $taxs;
+
+    /**
      * @var float
      */
     protected $unitPrice;
 
     /**
      * @var float
+     * (units * price) + tax
      */
     protected $total;
 
@@ -161,7 +167,4 @@ abstract class DocumentItem
     {
         $this->document = $document;
     }
-
-
 }
-

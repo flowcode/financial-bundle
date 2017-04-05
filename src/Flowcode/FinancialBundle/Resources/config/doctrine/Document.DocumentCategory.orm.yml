@@ -1,4 +1,4 @@
-Flowcode\FinancialBundle\Entity\Document\DocumentType:
+Flowcode\FinancialBundle\Entity\Document\DocumentCategory:
     type: mappedSuperclass
 
     id:

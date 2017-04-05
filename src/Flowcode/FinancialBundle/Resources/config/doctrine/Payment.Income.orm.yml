@@ -6,11 +6,14 @@ Flowcode\FinancialBundle\Entity\Payment\Income:
         id:
             type: integer
             generator: { strategy: AUTO }
-
-
     fields:
         name:
             type: string
             length: 255
-
+    oneToOne:
+        account:
+            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+            joinColumn:
+                name: account_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

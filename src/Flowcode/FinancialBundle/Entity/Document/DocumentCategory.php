@@ -3,9 +3,9 @@
 namespace Flowcode\FinancialBundle\Entity\Document;
 
 /**
- * DocumentType
+ * DocumentCategory
  */
-abstract class DocumentType
+abstract class DocumentCategory
 {
     /**
      * @var int
@@ -38,7 +38,7 @@ abstract class DocumentType
      *
      * @param string $name
      *
-     * @return DocumentType
+     * @return DocumentCategory
      */
     public function setName($name)
     {
@@ -62,7 +62,7 @@ abstract class DocumentType
      *
      * @param string $code
      *
-     * @return DocumentType
+     * @return DocumentCategory
      */
     public function setCode($code)
     {
@@ -81,4 +81,3 @@ abstract class DocumentType
         return $this->code;
     }
 }
-

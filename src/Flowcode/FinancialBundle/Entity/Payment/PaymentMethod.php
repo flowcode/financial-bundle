@@ -2,10 +2,13 @@
 
 namespace Flowcode\FinancialBundle\Entity\Payment;
 
+use Flowcode\FinancialBundle\Model\Core\AccountInterface;
+use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
+
 /**
  * PaymentMethod
  */
-abstract class PaymentMethod
+abstract class PaymentMethod implements PaymentMethodInterface
 {
     /**
      * @var int
@@ -17,6 +20,11 @@ abstract class PaymentMethod
      */
     private $name;
 
+
+    /**
+     * @var AccountInterface
+     */
+    protected $account;
 
     /**
      * Get id
@@ -51,5 +59,20 @@ abstract class PaymentMethod
     {
         return $this->name;
     }
-}
 
+    /**
+     * @return AccountInterface
+     */
+    public function getAccount(): AccountInterface
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param AccountInterface $account
+     */
+    public function setAccount(AccountInterface $account)
+    {
+        $this->account = $account;
+    }
+}

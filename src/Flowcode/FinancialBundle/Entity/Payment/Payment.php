@@ -2,6 +2,8 @@
 
 namespace Flowcode\FinancialBundle\Entity\Payment;
 
+use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
+
 /**
  * Payment
  */
@@ -16,6 +18,11 @@ abstract class Payment
      * @var string
      */
     protected $type;
+
+    /**
+     * @var PaymentMethodInterface
+     */
+    protected $method;
 
     /**
      * @var float
@@ -80,5 +87,20 @@ abstract class Payment
     {
         return $this->amount;
     }
-}
 
+    /**
+     * @return PaymentMethodInterface
+     */
+    public function getAccount(): PaymentMethodInterface
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param PaymentMethodInterface $account
+     */
+    public function setAccount(PaymentMethodInterface $account)
+    {
+        $this->account = $account;
+    }
+}

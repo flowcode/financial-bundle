@@ -14,7 +14,6 @@ Flowcode\FinancialBundle\Entity\Document\DocumentItemTax:
 
 
     manyToOne:
-
         documentItem:
             targetEntity: Flowcode\FinancialBundle\Model\Document\DocumentItemInterface
             joinColumn:

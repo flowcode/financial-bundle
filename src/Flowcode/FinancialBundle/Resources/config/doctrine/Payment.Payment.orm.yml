@@ -7,4 +7,10 @@ Flowcode\FinancialBundle\Entity\Payment\Payment:
             length: 255
         amount:
             type: float
+    manyToOne:
+        method:
+            targetEntity: Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface
+            joinColumn:
+                name: payment__id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

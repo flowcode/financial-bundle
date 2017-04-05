@@ -43,7 +43,9 @@ class TransactionService implements TransactionManagerInterface
          */
         $transaction = $this->instanceManagerInterface->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryIncome->setCredit($amount);
+        $journalEntryIncome->setAccount($income->getAccount());
         $journalEntryAsset->setDebit($amount);
+        $journalEntryAsset->setAccount($paymentMethod->getAccount());
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
         return $transaction;
@@ -57,6 +59,20 @@ class TransactionService implements TransactionManagerInterface
      */
     public function createExpenseTrx(ExpenseInterface $expense, PaymentMethodInterface $paymentMethod, $amount)
     {
-        // TODO: Implement createExpenseTrx() method.
+        //Egreso
+        $journalEntryExpense = $this->instanceManagerInterface->getInstanceFromInterface(JournalEntryInterface::class);
+        //Activo
+        $journalEntryAsset = $this->instanceManagerInterface->getInstanceFromInterface(JournalEntryInterface::class);
+        /**
+         * @var TransactionInterface $transaction
+         */
+        $transaction = $this->instanceManagerInterface->getInstanceFromInterface(TransactionInterface::class);
+        $journalEntryExpense->setDebit($amount);
+        $journalEntryExpense->setAccount($expense->getAccount());
+        $journalEntryAsset->setCredit($amount);
+        $journalEntryAsset->setAccount($paymentMethod->getAccount());
+        $transaction->addJournalEntry($journalEntryExpense);
+        $transaction->addJournalEntry($journalEntryAsset);
+        return $transaction;
     }
 }
