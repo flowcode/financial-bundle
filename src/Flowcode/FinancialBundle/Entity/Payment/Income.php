@@ -6,7 +6,7 @@ use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 
 /**
- * Income
+ * Flowcode\FinancialBundle\Entity\Payment\Income
  */
 abstract class Income implements IncomeInterface
 {

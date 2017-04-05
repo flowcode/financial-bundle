@@ -52,13 +52,60 @@ abstract class Account implements AccountInterface
     protected $journalEntries;
 
     /**
-     * Get id
-     *
-     * @return int
      */
+    protected $lft;
+
+    /**
+     */
+    protected $lvl;
+
+    /**
+     */
+    protected $rgt;
+
+    /**
+     * @var Account
+     */
+    protected $root;
+
+    /**
+     * @var Account
+     */
+    protected $parent;
+
+    /**
+     * @var Account
+     */
+    protected $children;
+
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    public function setParent(Account $parent = null)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
     }
 
     /**
@@ -177,21 +224,5 @@ abstract class Account implements AccountInterface
     public function getEditable()
     {
         return $this->editable;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getJournalEntries(): ArrayCollection
-    {
-        return $this->journalEntries;
-    }
-
-    /**
-     * @param ArrayCollection $journalEntries
-     */
-    public function setJournalEntries(ArrayCollection $journalEntries)
-    {
-        $this->journalEntries = $journalEntries;
     }
 }

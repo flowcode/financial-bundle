@@ -5,7 +5,7 @@ namespace Flowcode\FinancialBundle\Model\Document;
 use Flowcode\FinancialBundle\Model\Document\DocumentItemInterface;
 
 /**
- * Interface DocumentInterface
+ * Interface Flowcode\FinancialBundle\Model\Document\DocumentInterface
  */
 interface DocumentInterface
 {

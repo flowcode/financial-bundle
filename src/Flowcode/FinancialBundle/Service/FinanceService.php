@@ -9,4 +9,15 @@ use Flowcode\FinancialBundle\Model\Manager\FinanceManagerInterface;
  */
 class FinanceService implements FinanceManagerInterface
 {
+    public function __construct()
+    {
+        
+    }
+    public function createInstantSale(
+        DocumentInterface $document,
+        IncomeInterface $income,
+        PaymentMethodInterface $paymentMethod
+    ) {
+        return $document;
+    }
 }

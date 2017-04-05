@@ -3,7 +3,7 @@
 namespace Flowcode\FinancialBundle\Model\Payment;
 
 /**
- * Interface PaymentMethodInterface
+ * Interface Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface
  */
 interface PaymentMethodInterface
 {
