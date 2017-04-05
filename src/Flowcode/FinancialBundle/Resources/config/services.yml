@@ -1,7 +1,13 @@
 services:
     ffb.instancemanager:
-        class:        Flowcode\FinancialBundle\Service\InstanceManagerInterface
+        class:        Flowcode\FinancialBundle\Service\InstanceService
         arguments: ["@doctrine.orm.entity_manager"]
     ffb.transaction:
         class:        Flowcode\FinancialBundle\Service\TransactionService
         arguments: ["@ffb.instancemanager"]
+    ffb.document:
+        class:        Flowcode\FinancialBundle\Service\DocumentService
+        arguments: ["@ffb.transaction"]
+    ffb.finance:
+        class:        Flowcode\FinancialBundle\Service\FinanceService
+        arguments: ["@ffb.document","@ffb.transaction"]

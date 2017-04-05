@@ -7,7 +7,7 @@ use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
 use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
 
 /**
- * Interface TransactionManagerInterface
+ * Interface Flowcode\FinancialBundle\Model\Manager\TransactionManagerInterface
  */
 interface TransactionManagerInterface
 {

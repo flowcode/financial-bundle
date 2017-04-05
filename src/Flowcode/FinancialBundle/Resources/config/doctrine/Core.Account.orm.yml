@@ -21,9 +21,9 @@ Flowcode\FinancialBundle\Entity\Core\Account:
             type: integer
         subType:
             type: integer
+            nullable: true
         editable:
             type: boolean
-
         lft:
           type: integer
           gedmo:

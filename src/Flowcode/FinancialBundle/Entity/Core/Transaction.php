@@ -30,6 +30,11 @@ abstract class Transaction implements TransactionInterface
      * @var ArrayCollection
      */
     protected $journalEntries;
+    
+    /**
+     * @var Document
+     */
+    protected $document;
 
     /**
      * Transaction constructor.

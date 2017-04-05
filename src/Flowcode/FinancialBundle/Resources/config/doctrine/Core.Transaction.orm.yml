@@ -15,5 +15,12 @@ Flowcode\FinancialBundle\Entity\Core\Transaction:
             type: datetime
 
 
+    manyToOne:
+      document:
+        targetEntity: Flowcode\FinancialBundle\Entity\Document\Document
+        inversedBy: transactions
+        joinColumn:
+          name: document_id
+          referencedColumnName: id
 
     lifecycleCallbacks: {  }

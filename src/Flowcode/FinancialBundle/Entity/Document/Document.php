@@ -75,6 +75,10 @@ abstract class Document
      * @var Payment
      */
     protected $payments;
+    /**
+     * @var Transaction
+     */
+    protected $transactions;
 
     /**
      * Get id

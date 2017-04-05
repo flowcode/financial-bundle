@@ -23,4 +23,6 @@ interface DocumentInterface
      * Get items
      */
     public function getItems();
+
+    public function getTotal();
 }
