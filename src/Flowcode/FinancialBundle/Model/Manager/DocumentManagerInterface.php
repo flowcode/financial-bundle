@@ -15,6 +15,5 @@ interface DocumentManagerInterface
      * @param string $statusTo
      * @return mixed
      */
-    function changeStatusTo(DocumentInterface $document, $statusTo);
-
+    public function changeStatusTo(DocumentInterface $document, $statusTo);
 }

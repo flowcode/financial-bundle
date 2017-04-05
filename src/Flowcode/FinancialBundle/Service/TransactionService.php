@@ -9,17 +9,22 @@ use Flowcode\FinancialBundle\Model\Manager\TransactionManagerInterface;
 use Flowcode\FinancialBundle\Model\Payment\ExpenseInterface;
 use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
 use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
+use Flowcode\FinancialBundle\Model\Manager\InstanceManagerInterface;
 
 /**
  * Class TransactionService
  */
 class TransactionService implements TransactionManagerInterface
 {
-
     /**
      * @var EntityManagerInterface
      */
-    protected $entityManager;
+    protected $instanceManagerInterface;
+
+    public function __construct(InstanceManagerInterface $instanceManagerInterface)
+    {
+        $this->instanceManagerInterface = $instanceManagerInterface;
+    }
 
     /**
      * @param IncomeInterface $income
@@ -27,35 +32,21 @@ class TransactionService implements TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    function createIncomeTrx(IncomeInterface $income, PaymentMethodInterface $paymentMethod, $amount)
+    public function createIncomeTrx(IncomeInterface $income, PaymentMethodInterface $paymentMethod, $amount)
     {
-
-        /**
-         * @var JournalEntryInterface $journalEntry1
-         */
-        $journalEntry1 = $this->getInstanceFromInterface(JournalEntryInterface::class);
-
-
+        //Ingreso
+        $journalEntryIncome = $this->instanceManagerInterface->getInstanceFromInterface(JournalEntryInterface::class);
+        //Activo
+        $journalEntryAsset = $this->instanceManagerInterface->getInstanceFromInterface(JournalEntryInterface::class);
         /**
          * @var TransactionInterface $transaction
          */
-        $transaction = $this->getInstanceFromInterface(TransactionInterface::class);
-
-        $transaction->addJournalEntry($journalEntry1);
-
-        
+        $transaction = $this->instanceManagerInterface->getInstanceFromInterface(TransactionInterface::class);
+        $journalEntryIncome->setCredit($amount);
+        $journalEntryAsset->setDebit($amount);
+        $transaction->addJournalEntry($journalEntryIncome);
+        $transaction->addJournalEntry($journalEntryAsset);
         return $transaction;
-
-    }
-
-    private function getInstanceFromInterface($classInterface)
-    {
-        $metadata = $this->entityManager->getClassMetadata($classInterface);
-        $realClassName = $metadata->getName();
-
-        $class = new \ReflectionClass($realClassName);
-
-        return $class->newInstance();
     }
 
     /**
@@ -64,7 +55,7 @@ class TransactionService implements TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    function createExpenseTrx(ExpenseInterface $expense, PaymentMethodInterface $paymentMethod, $amount)
+    public function createExpenseTrx(ExpenseInterface $expense, PaymentMethodInterface $paymentMethod, $amount)
     {
         // TODO: Implement createExpenseTrx() method.
     }

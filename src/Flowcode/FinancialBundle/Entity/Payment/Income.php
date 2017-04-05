@@ -2,10 +2,12 @@
 
 namespace Flowcode\FinancialBundle\Entity\Payment;
 
+use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
+
 /**
  * Income
  */
-abstract class Income
+abstract class Income implements IncomeInterface
 {
     /**
      * @var int
@@ -52,4 +54,3 @@ abstract class Income
         return $this->name;
     }
 }
-

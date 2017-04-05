@@ -18,7 +18,7 @@ interface TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    function createIncomeTrx(IncomeInterface $income, PaymentMethodInterface $paymentMethod, $amount);
+    public function createIncomeTrx(IncomeInterface $income, PaymentMethodInterface $paymentMethod, $amount);
 
     /**
      * @param ExpenseInterface $expense
@@ -26,6 +26,5 @@ interface TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    function createExpenseTrx(ExpenseInterface $expense, PaymentMethodInterface $paymentMethod, $amount);
-
+    public function createExpenseTrx(ExpenseInterface $expense, PaymentMethodInterface $paymentMethod, $amount);
 }
