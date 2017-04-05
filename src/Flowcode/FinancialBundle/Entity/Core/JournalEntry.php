@@ -4,6 +4,7 @@ namespace Flowcode\FinancialBundle\Entity\Core;
 
 use Flowcode\FinancialBundle\Model\Core\JournalEntryInterface;
 use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
+use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 
 /**
  * JournalEntry
