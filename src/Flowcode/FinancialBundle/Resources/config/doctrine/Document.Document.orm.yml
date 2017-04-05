@@ -21,6 +21,7 @@ Flowcode\FinancialBundle\Entity\Document\Document:
             nullable: true
         dueDate:
             type: datetime
+            nullable: true
         total:
             type: float
         totalPayed:
