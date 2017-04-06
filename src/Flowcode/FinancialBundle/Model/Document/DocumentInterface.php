@@ -60,5 +60,5 @@ interface DocumentInterface
     
     public function getTotalPayed();
 
-    public function setStatus(String $status);
+    public function setStatus($status);
 }
