@@ -3,11 +3,12 @@
 namespace Flowcode\FinancialBundle\Entity\Payment;
 
 use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
+use Flowcode\FinancialBundle\Model\Payment\PaymentInterface;
 
 /**
  * Payment
  */
-abstract class Payment
+abstract class Payment implements PaymentInterface
 {
     /**
      * @var int

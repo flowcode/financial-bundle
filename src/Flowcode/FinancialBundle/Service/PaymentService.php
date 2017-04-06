@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Flowcode\FinancialBundle\Model\Manager\PaymentManagerInterface;
 use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
 use Flowcode\FinancialBundle\Model\Payment\PaymentInterface;
+use Flowcode\FinancialBundle\Model\Manager\InstanceManagerInterface;
 
 /**
  * Class PaymentService
@@ -24,6 +25,9 @@ class PaymentService implements PaymentManagerInterface
 
     public function createPayment(PaymentMethodInterface $paymentMethod, $amount)
     {
-        return $this->instanceManagerInterface->getInstanceFromInterface(PaymentInterface::class);
+        $payment = $this->instanceManagerInterface->getInstanceFromInterface(PaymentInterface::class);
+        $payment->setAmount($amount);
+        $payment->setAccount($paymentMethod);
+        return $payment;
     }
 }

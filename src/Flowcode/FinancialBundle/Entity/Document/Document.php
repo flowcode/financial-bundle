@@ -276,7 +276,7 @@ abstract class Document implements DocumentInterface
     * Set status
     * @return $this
     */
-    public function setStatus($status)
+    public function setStatus(String $status)
     {
         $this->status = $status;
         return $this;

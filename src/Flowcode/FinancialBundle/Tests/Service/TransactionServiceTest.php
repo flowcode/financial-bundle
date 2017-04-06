@@ -50,10 +50,10 @@ class TransactionServiceTest extends BaseTestCase
         $transaction2 = $transactionService->createIncomeTrx($income, $paymentMethod, $amount);
 
         $this->assertEquals(0, $transaction2->getJournalEntries()[0]->getDebit());
-        $this->assertEquals(1000, $transaction2->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[0]->getCredit());
         $this->assertEquals($incomeFinantialAccount, $transaction2->getJournalEntries()[0]->getAccount());
 
-        $this->assertEquals(1000, $transaction2->getJournalEntries()[1]->getDebit());
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[1]->getDebit());
         $this->assertEquals(0, $transaction2->getJournalEntries()[1]->getCredit());
         $this->assertEquals($paymentMethodFinantialAccount, $transaction2->getJournalEntries()[1]->getAccount());
     }
@@ -92,12 +92,12 @@ class TransactionServiceTest extends BaseTestCase
         $amount = 1000;
         $transaction2 = $transactionService->createExpenseTrx($expense, $paymentMethod, $amount);
 
-        $this->assertEquals(1000, $transaction2->getJournalEntries()[0]->getDebit());
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[0]->getDebit());
         $this->assertEquals(0, $transaction2->getJournalEntries()[0]->getCredit());
         $this->assertEquals($expenseFinantialAccount, $transaction2->getJournalEntries()[0]->getAccount());
 
         $this->assertEquals(0, $transaction2->getJournalEntries()[1]->getDebit());
-        $this->assertEquals(1000, $transaction2->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[1]->getCredit());
         $this->assertEquals($paymentMethodFinantialAccount, $transaction2->getJournalEntries()[1]->getAccount());
     }
     

@@ -5,9 +5,10 @@ namespace Flowcode\FinancialBundle\Service;
 use Flowcode\FinancialBundle\Model\Manager\DocumentManagerInterface;
 use Flowcode\FinancialBundle\Model\Manager\TransactionManagerInterface;
 use Flowcode\FinancialBundle\Entity\Document\Document;
+use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
 
 /**
- * Class DocumentService
+ * Class Flowcode\FinancialBundle\Service\DocumentService
  */
 class DocumentService implements DocumentManagerInterface
 {
