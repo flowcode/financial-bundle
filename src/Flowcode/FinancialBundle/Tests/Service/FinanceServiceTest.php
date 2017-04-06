@@ -60,6 +60,12 @@ class FinanceServiceTest extends BaseTestCase
         $amount = 1000;
         $document->setTotal($amount);
         $document = $financeService->createInstantSale($document, $income, $paymentMethod);
+        
+        $this->assertEquals($amount, $document->getTotalPayed());
+        // No debe haber nada pendiente de pago
+        $this->assertEquals(0, $document->getBalance());
+        $this->assertEquals(Document::STATUS_PAID, $document->getStatus());
+
         $transactions = $document->getTransactions();
         $this->assertEquals(1, count($transactions));
         $transaction = $transactions[0];
@@ -112,6 +118,12 @@ class FinanceServiceTest extends BaseTestCase
         $amount = 1000;
         $document->setTotal($amount);
         $document = $financeService->createInstantExpense($document, $expense, $paymentMethod);
+
+        $this->assertEquals($amount, $document->getTotalPayed());
+        // No debe haber nada pendiente de pago
+        $this->assertEquals(0, $document->getBalance());
+        $this->assertEquals(Document::STATUS_PAID, $document->getStatus());
+
         $transactions = $document->getTransactions();
         $this->assertEquals(1, count($transactions));
         $transaction = $transactions[0];

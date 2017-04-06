@@ -30,7 +30,7 @@ class DocumentService implements DocumentManagerInterface
     {
         $document->updateTotalPayed()
                  ->updateBalance();
-        if ($document->getTotalPayed() == 0) {
+        if ($document->getBalance() == 0) {
             $this->changeStatusTo($document, Document::STATUS_PAID);
         }
         return $document;
