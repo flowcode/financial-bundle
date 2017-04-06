@@ -38,7 +38,7 @@ Flowcode\FinancialBundle\Entity\Core\Account:
             - treeLevel
     manyToOne:
         root:
-          targetEntity: Flowcode\FinancialBundle\Entity\Core\Account
+          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
           joinColumn:
             name: tree_root
             referencedColumnName: id
@@ -46,7 +46,7 @@ Flowcode\FinancialBundle\Entity\Core\Account:
           gedmo:
             - treeRoot
         parent:
-          targetEntity: Flowcode\FinancialBundle\Entity\Core\Account
+          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
           inversedBy: children
           joinColumn:
             name: parent_id
@@ -57,7 +57,7 @@ Flowcode\FinancialBundle\Entity\Core\Account:
 # No se puede agergar en el abstract
 #        oneToMany:
 #        children:
-#          targetEntity: Flowcode\FinancialBundle\Entity\Core\Account
+#          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
 #          mappedBy: parent
 #          orderBy:
 #            lft: ASC

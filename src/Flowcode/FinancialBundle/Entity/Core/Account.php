@@ -83,22 +83,14 @@ abstract class Account implements AccountInterface
         return $this->id;
     }
 
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
 
-    public function getTitle()
-    {
-        return $this->title;
-    }
 
     public function getRoot()
     {
         return $this->root;
     }
 
-    public function setParent(Account $parent = null)
+    public function setParent(AccountInterface $parent = null)
     {
         $this->parent = $parent;
     }
@@ -107,7 +99,6 @@ abstract class Account implements AccountInterface
     {
         return $this->parent;
     }
-
     /**
      * Set code
      *
