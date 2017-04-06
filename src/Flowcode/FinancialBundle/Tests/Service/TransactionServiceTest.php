@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Flowcode\FinancialBundle\Entity\Core\JournalEntry;
 use Flowcode\FinancialBundle\Entity\Core\Transaction;
 use Flowcode\FinancialBundle\Entity\Core\Account;
+use Flowcode\FinancialBundle\Entity\Payment\Income;
+use Flowcode\FinancialBundle\Entity\Payment\PaymentMethod;
+use Flowcode\FinancialBundle\Service\InstanceService;
+use Flowcode\FinancialBundle\Entity\Payment\Expense;
 
 class TransactionServiceTest extends BaseTestCase
 {
@@ -22,18 +26,18 @@ class TransactionServiceTest extends BaseTestCase
      */
     public function testCreateIncomeTransaction_returnTransactionWithJournalEntites()
     {
-        $income = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Payment\Income')
+        $income = $this->getMockBuilder(Income::class)
             ->getMockForAbstractClass();
-        $incomeFinantialAccount = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Core\Account')
+        $incomeFinantialAccount = $this->getMockBuilder(Account::class)
             ->getMockForAbstractClass();
         $income->setAccount($incomeFinantialAccount);
 
-        $paymentMethod = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Payment\PaymentMethod')
+        $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
             ->getMockForAbstractClass();
-        $paymentMethodFinantialAccount = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Core\Account')
+        $paymentMethodFinantialAccount = $this->getMockBuilder(Account::class)
             ->getMockForAbstractClass();
         $paymentMethod->setAccount($paymentMethodFinantialAccount);
-        $instanceManagerInterface = $this->getMockBuilder('Flowcode\FinancialBundle\Service\InstanceService')
+        $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $callBack = $this->getMockCallbackForGetInstanceFromInterface();
@@ -65,18 +69,18 @@ class TransactionServiceTest extends BaseTestCase
      */
     public function testCreateExpenseTransaction_returnTransactionWithJournalEntites()
     {
-        $expense = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Payment\Expense')
+        $expense = $this->getMockBuilder(Expense::class)
             ->getMockForAbstractClass();
-        $expenseFinantialAccount = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Core\Account')
+        $expenseFinantialAccount = $this->getMockBuilder(Account::class)
             ->getMockForAbstractClass();
         $expense->setAccount($expenseFinantialAccount);
 
-        $paymentMethod = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Payment\PaymentMethod')
+        $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
             ->getMockForAbstractClass();
-        $paymentMethodFinantialAccount = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Core\Account')
+        $paymentMethodFinantialAccount = $this->getMockBuilder(Account::class)
             ->getMockForAbstractClass();
         $paymentMethod->setAccount($paymentMethodFinantialAccount);
-        $instanceManagerInterface = $this->getMockBuilder('Flowcode\FinancialBundle\Service\InstanceService')
+        $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
                                         ->disableOriginalConstructor()
                                         ->getMock();
         $callBack = $this->getMockCallbackForGetInstanceFromInterface();

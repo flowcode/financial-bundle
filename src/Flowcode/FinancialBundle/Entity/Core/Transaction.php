@@ -30,7 +30,7 @@ abstract class Transaction implements TransactionInterface
      * @var ArrayCollection
      */
     protected $journalEntries;
-    
+
     /**
      * @var Document
      */
@@ -43,7 +43,6 @@ abstract class Transaction implements TransactionInterface
     {
         $this->journalEntries = new ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -135,6 +134,4 @@ abstract class Transaction implements TransactionInterface
     {
         return $this->journalEntries;
     }
-
 }
-

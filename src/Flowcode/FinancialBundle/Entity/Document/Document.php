@@ -3,11 +3,12 @@
 namespace Flowcode\FinancialBundle\Entity\Document;
 
 use Flowcode\FinancialBundle\Model\Document\DocumentCategoryInterface;
+use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
 
 /**
- * Document
+ * Flowcode\FinancialBundle\Entity\Document\Document
  */
-abstract class Document
+abstract class Document implements DocumentInterface
 {
 
     const STATUS_CANCELLED = 'status_cancelled';
@@ -72,11 +73,15 @@ abstract class Document
     protected $status;
 
     /**
-     * @var Payment
+     * @var ArrayCollection
      */
     protected $payments;
     /**
-     * @var Transaction
+     * @var ArrayCollection
+     */
+    protected $items;
+    /**
+     * @var ArrayCollection
      */
     protected $transactions;
 
@@ -259,18 +264,90 @@ abstract class Document
     }
 
     /**
-     * @return DocumentCategoryInterface
-     */
-    public function getType(): DocumentCategoryInterface
+    * Get status
+    * @return String
+    */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    /**
+    * Set status
+    * @return $this
+    */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+    * Get type
+    * @return String
+    */
+    public function getType()
     {
         return $this->type;
     }
 
     /**
-     * @param DocumentCategoryInterface $type
-     */
-    public function setType(DocumentCategoryInterface $type)
+    * Set type
+    * @return $this
+    */
+    public function setType($type)
     {
         $this->type = $type;
+        return $this;
+    }
+    /**
+     * @return DocumentCategoryInterface
+     */
+    public function getCategory(): DocumentCategoryInterface
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param DocumentCategoryInterface $category
+     */
+    public function setCategory(DocumentCategoryInterface $category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * Se actualiza el total pagado calculando nuevamente el valor.
+     * @fecha   2017-04-05
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  Document                  [description]
+     */
+    public function updateTotalPayed()
+    {
+        $totalToPay = $this->getTotal();
+        $totalPayed = 0;
+        foreach ($this->getPayments() as $payment) {
+            $totalPayed += $payment->getAmount();
+        }
+        $this->setTotalPayed($totalPayed);
+        return $this;
+    }
+
+    /**
+     * Se actualiza el balance de acuerdo a el total pagado y total a pagar en la entidad
+     * @fecha   2017-04-05
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function updateBalance()
+    {
+        $totalToPay = $this->getTotal();
+        $totalPayed = $this->getTotalPayed();
+        $this->setBalance($totalToPay - $totalPayed);
+        return $this;
     }
 }

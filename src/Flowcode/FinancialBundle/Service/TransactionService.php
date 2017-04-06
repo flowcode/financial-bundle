@@ -2,7 +2,6 @@
 
 namespace Flowcode\FinancialBundle\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Flowcode\FinancialBundle\Model\Core\JournalEntryInterface;
 use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
 use Flowcode\FinancialBundle\Model\Manager\TransactionManagerInterface;
@@ -17,7 +16,7 @@ use Flowcode\FinancialBundle\Model\Manager\InstanceManagerInterface;
 class TransactionService implements TransactionManagerInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var InstanceManagerInterface
      */
     protected $instanceManagerInterface;
 
@@ -32,8 +31,11 @@ class TransactionService implements TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    public function createIncomeTrx(IncomeInterface $income, PaymentMethodInterface $paymentMethod, $amount)
-    {
+    public function createIncomeTrx(
+        IncomeInterface $income,
+        PaymentMethodInterface $paymentMethod,
+        $amount
+    ) {
         //Ingreso
         $journalEntryIncome = $this->instanceManagerInterface->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
@@ -57,8 +59,11 @@ class TransactionService implements TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    public function createExpenseTrx(ExpenseInterface $expense, PaymentMethodInterface $paymentMethod, $amount)
-    {
+    public function createExpenseTrx(
+        ExpenseInterface $expense,
+        PaymentMethodInterface $paymentMethod,
+        $amount
+    ) {
         //Egreso
         $journalEntryExpense = $this->instanceManagerInterface->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
