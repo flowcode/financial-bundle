@@ -20,7 +20,7 @@ class InstanceService implements InstanceManagerInterface
      */
     protected $entityManager;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->entityManager = $em;
     }

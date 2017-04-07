@@ -16,5 +16,5 @@ interface PaymentInterface
      */
     public function getAmount();
     public function setAmount($amount);
-    public function setAccount(PaymentMethodInterface $account);
+    public function setMethod(PaymentMethodInterface $method);
 }

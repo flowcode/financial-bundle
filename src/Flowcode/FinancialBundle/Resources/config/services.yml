@@ -13,4 +13,4 @@ services:
         arguments: ["@ffb.transaction"]
     ffb.finance:
         class:        Flowcode\FinancialBundle\Service\FinanceService
-        arguments: ["@ffb.document","@ffb.transaction", "@ffb.payment"]
+        arguments: ["@ffb.transaction", "@ffb.document", "@ffb.payment"]

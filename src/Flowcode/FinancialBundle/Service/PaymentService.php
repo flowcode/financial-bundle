@@ -27,7 +27,7 @@ class PaymentService implements PaymentManagerInterface
     {
         $payment = $this->instanceManagerInterface->getInstanceFromInterface(PaymentInterface::class);
         $payment->setAmount($amount);
-        $payment->setAccount($paymentMethod);
+        $payment->setMethod($paymentMethod);
         return $payment;
     }
 }

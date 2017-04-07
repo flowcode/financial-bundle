@@ -4,6 +4,7 @@ namespace Flowcode\FinancialBundle\Entity\Document;
 
 use Flowcode\FinancialBundle\Model\Document\DocumentCategoryInterface;
 use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Flowcode\FinancialBundle\Entity\Document\Document
@@ -15,9 +16,9 @@ abstract class Document implements DocumentInterface
     const STATUS_DRAFT = 'status_draft';
     const STATUS_PENDING = 'status_pending';
     const STATUS_PAID = 'status_paid';
-
     const TYPE_CUSTOMER = 'customer';
     const TYPE_SUPPLIER = 'supplier';
+
     /**
      * @var int
      */
@@ -32,10 +33,12 @@ abstract class Document implements DocumentInterface
      * @var DocumentCategoryInterface
      */
     protected $category;
+
     /**
      * @var string
      */
     protected $type;
+
     /**
      * @var string
      */
@@ -76,14 +79,21 @@ abstract class Document implements DocumentInterface
      * @var ArrayCollection
      */
     protected $payments;
+
     /**
      * @var ArrayCollection
      */
     protected $items;
+
     /**
      * @var ArrayCollection
      */
     protected $transactions;
+
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -264,18 +274,18 @@ abstract class Document implements DocumentInterface
     }
 
     /**
-    * Get status
-    * @return String
-    */
+     * Get status
+     * @return String
+     */
     public function getStatus()
     {
         return $this->status;
     }
-    
+
     /**
-    * Set status
-    * @return $this
-    */
+     * Set status
+     * @return $this
+     */
     public function setStatus($status)
     {
         $this->status = $status;
@@ -283,23 +293,24 @@ abstract class Document implements DocumentInterface
     }
 
     /**
-    * Get type
-    * @return String
-    */
+     * Get type
+     * @return String
+     */
     public function getType()
     {
         return $this->type;
     }
 
     /**
-    * Set type
-    * @return $this
-    */
+     * Set type
+     * @return $this
+     */
     public function setType($type)
     {
         $this->type = $type;
         return $this;
     }
+
     /**
      * @return DocumentCategoryInterface
      */
@@ -328,7 +339,8 @@ abstract class Document implements DocumentInterface
     {
         $totalToPay = $this->getTotal();
         $totalPayed = 0;
-        foreach ($this->getPayments() as $payment) {
+        foreach ($this->getPayments() as $payment)
+        {
             $totalPayed += $payment->getAmount();
         }
         $this->setTotalPayed($totalPayed);
@@ -350,4 +362,5 @@ abstract class Document implements DocumentInterface
         $this->setBalance($totalToPay - $totalPayed);
         return $this;
     }
+
 }

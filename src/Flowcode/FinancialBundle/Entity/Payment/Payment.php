@@ -10,6 +10,7 @@ use Flowcode\FinancialBundle\Model\Payment\PaymentInterface;
  */
 abstract class Payment implements PaymentInterface
 {
+
     /**
      * @var int
      */
@@ -29,7 +30,6 @@ abstract class Payment implements PaymentInterface
      * @var float
      */
     protected $amount;
-
 
     /**
      * Get id
@@ -89,19 +89,14 @@ abstract class Payment implements PaymentInterface
         return $this->amount;
     }
 
-    /**
-     * @return PaymentMethodInterface
-     */
-    public function getAccount(): PaymentMethodInterface
+    public function getMethod(): PaymentMethodInterface
     {
-        return $this->account;
+        return $this->method;
     }
 
-    /**
-     * @param PaymentMethodInterface $account
-     */
-    public function setAccount(PaymentMethodInterface $account)
+    public function setMethod(PaymentMethodInterface $method)
     {
-        $this->account = $account;
+        $this->method = $method;
     }
+
 }
