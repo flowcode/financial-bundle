@@ -329,10 +329,6 @@ abstract class Document implements DocumentInterface
 
     /**
      * Se actualiza el total pagado calculando nuevamente el valor.
-     * @fecha   2017-04-05
-     * @author Francisco Memoli Olmos
-     * @email   fmemoli@flowcode.com.ar
-     * @version [version]
      * @return  Document                  [description]
      */
     public function updateTotalPayed()
@@ -349,10 +345,6 @@ abstract class Document implements DocumentInterface
 
     /**
      * Se actualiza el balance de acuerdo a el total pagado y total a pagar en la entidad
-     * @fecha   2017-04-05
-     * @author Francisco Memoli Olmos
-     * @email   fmemoli@flowcode.com.ar
-     * @version [version]
      * @return  [type]                  [description]
      */
     public function updateBalance()
