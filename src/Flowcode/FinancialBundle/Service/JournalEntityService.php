@@ -6,6 +6,7 @@ use Flowcode\FinancialBundle\Model\Manager\JournalEntityManagerInterface;
 use Flowcode\FinancialBundle\Model\Core\JournalEntryInterface;
 use Flowcode\FinancialBundle\Entity\Core\Account;
 use Flowcode\FinancialBundle\Repository\JournalEntityRepository;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Class Flowcode\FinancialBundle\Service\JournalEntityService
@@ -13,7 +14,7 @@ use Flowcode\FinancialBundle\Repository\JournalEntityRepository;
 class JournalEntityService implements JournalEntityManagerInterface
 {
     private $journalEntityRepository;
-    public function __construct(JournalEntityRepository $journalEntityRepository)
+    public function __construct(EntityRepository $journalEntityRepository)
     {
         $this->journalEntityRepository = $journalEntityRepository;
     }
