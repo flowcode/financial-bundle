@@ -19,7 +19,7 @@ services:
         arguments: ["@ffb.transaction", "@ffb.document", "@ffb.payment"]
     ffb.repository.journalentry:
         class: Doctrine\ORM\EntityRepository
-        factory: [@doctrine.orm.entity_manager, getRepository]
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - Flowcode\FinancialBundle\Model\Core\JournalEntryInterface
     ffb.account:
