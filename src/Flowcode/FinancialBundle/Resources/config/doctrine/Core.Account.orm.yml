@@ -36,6 +36,8 @@ Flowcode\FinancialBundle\Entity\Core\Account:
           type: integer
           gedmo:
             - treeLevel
+        balance:
+            type: float
     manyToOne:
         root:
           targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface

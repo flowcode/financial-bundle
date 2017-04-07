@@ -3,7 +3,7 @@
 namespace Flowcode\FinancialBundle\Model\Document;
 
 use Flowcode\FinancialBundle\Model\Document\DocumentItemInterface;
-use Flowcode\FinancialBundle\Model\Payment\PaymentInterface;
+use Flowcode\FinancialBundle\Model\Payment\PaymentDocumentInterface;
 use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
 
 /**
@@ -33,24 +33,16 @@ interface DocumentInterface
      * Remove Transaction
      */
     public function removeTransaction(TransactionInterface $transaction);
-
     /**
      * Get Transactions
      */
     public function getTransactions();
-    /**
-     * Add Payment
-     */
-    public function addPayment(PaymentInterface $payment);
-    /**
-     * Remove Payment
-     */
-    public function removePayment(PaymentInterface $payment);
-
-    /**
-     * Get Payments
-     */
-    public function getPayments();
+    
+    public function addPaymentDocument(PaymentDocumentInterface $payment);
+    
+    public function removePaymentDocument(PaymentDocumentInterface $payment);
+    
+    public function getPaymentsDocuments();
 
     public function getTotal();
 

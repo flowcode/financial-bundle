@@ -2,7 +2,9 @@
 
 namespace Flowcode\FinancialBundle\Model\Core;
 
-
+/*
+    Flowcode\FinancialBundle\Model\Core\JournalEntryInterface
+ */
 interface JournalEntryInterface
 {
 
@@ -44,4 +46,8 @@ interface JournalEntryInterface
      * @return float
      */
     public function getCredit();
+
+    public function getBalance();
+    
+    public function setBalance($balance);
 }

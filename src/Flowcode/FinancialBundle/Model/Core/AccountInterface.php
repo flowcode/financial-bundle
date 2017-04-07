@@ -5,7 +5,7 @@ namespace Flowcode\FinancialBundle\Model\Core;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Interface AccountInterface
+ * Interface Flowcode\FinancialBundle\Model\Core\AccountInterface
  */
 interface AccountInterface
 {
@@ -25,4 +25,8 @@ interface AccountInterface
      * @param ArrayCollection $journalEntries
      */
     public function setJournalEntries(ArrayCollection $journalEntries);
+    
+    public function setBalance($balance);
+
+    public function getBalance();
 }

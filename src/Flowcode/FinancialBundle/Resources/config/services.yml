@@ -8,9 +8,24 @@ services:
     ffb.payment:
         class:        Flowcode\FinancialBundle\Service\PaymentService
         arguments: ["@ffb.instancemanager"]
+    ffb.paymentdocument:
+        class:        Flowcode\FinancialBundle\Service\PaymentDocumentService
+        arguments: ["@ffb.instancemanager"]
     ffb.document:
         class:        Flowcode\FinancialBundle\Service\DocumentService
         arguments: ["@ffb.transaction"]
     ffb.finance:
         class:        Flowcode\FinancialBundle\Service\FinanceService
         arguments: ["@ffb.transaction", "@ffb.document", "@ffb.payment"]
+    ffb.repository.journalentry:
+        class: Doctrine\ORM\EntityRepository
+        factory: [@doctrine.orm.entity_manager, getRepository]
+        arguments:
+            - Flowcode\FinancialBundle\Model\Core\JournalEntryInterface
+    ffb.account:
+        class:        Flowcode\FinancialBundle\Service\AccountService
+        arguments: ["@ffb.repository.journalentry"]
+    ffb.journalentity:
+        class:        Flowcode\FinancialBundle\Service\JournalEntity
+        arguments: ["@ffb.repository.journalentry"]
+

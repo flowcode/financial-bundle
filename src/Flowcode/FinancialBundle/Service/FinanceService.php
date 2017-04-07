@@ -7,6 +7,7 @@ use Flowcode\FinancialBundle\Model\Manager\FinanceManagerInterface;
 use Flowcode\FinancialBundle\Model\Manager\DocumentManagerInterface;
 use Flowcode\FinancialBundle\Model\Manager\TransactionManagerInterface;
 use Flowcode\FinancialBundle\Model\Manager\PaymentManagerInterface;
+use Flowcode\FinancialBundle\Model\Manager\PaymentDocumentManagerInterface;
 use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
 use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
 use Flowcode\FinancialBundle\Model\Payment\ExpenseInterface;
@@ -24,11 +25,13 @@ class FinanceService implements FinanceManagerInterface
     public function __construct(
         TransactionManagerInterface $transactionService,
         DocumentManagerInterface $documentService,
-        PaymentManagerInterface $paymentService
+        PaymentManagerInterface $paymentService,
+        PaymentDocumentManagerInterface $paymentDocumentService
     ) {
         $this->transactionService = $transactionService;
         $this->documentService = $documentService;
         $this->paymentService = $paymentService;
+        $this->paymentDocumentService = $paymentDocumentService;
     }
     public function createInstantSale(
         DocumentInterface $document,
@@ -36,10 +39,14 @@ class FinanceService implements FinanceManagerInterface
         PaymentMethodInterface $paymentMethod
     ) {
         $amount = $document->getTotal();
-        $transaction = $this->transactionService->createIncomeTrx($income, $paymentMethod, $amount);
-        $document->addTransaction($transaction);
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
-        $document->addPayment($payment);
+        $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
+        
+        $transaction = $this->transactionService->createIncomeTrx($income, $paymentDocument, $amount);
+        $document->addTransaction($transaction);
+        $document->addPaymentDocument($paymentDocument);
+        
+        $this->transactionService->updateBalancesByTransaction($transaction);
         $this->documentService->updateDocument($document);
         return $document;
     }
@@ -49,10 +56,14 @@ class FinanceService implements FinanceManagerInterface
         PaymentMethodInterface $paymentMethod
     ) {
         $amount = $document->getTotal();
-        $transaction = $this->transactionService->createExpenseTrx($expense, $paymentMethod, $amount);
-        $document->addTransaction($transaction);
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
-        $document->addPayment($payment);
+        $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
+
+        $transaction = $this->transactionService->createExpenseTrx($expense, $paymentDocument, $amount);
+        $document->addTransaction($transaction);
+        $document->addPaymentDocument($paymentDocument);
+
+        $this->transactionService->updateBalancesByTransaction($transaction);
         $this->documentService->updateDocument($document);
         return $document;
     }

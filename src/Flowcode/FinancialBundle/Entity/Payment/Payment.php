@@ -31,6 +31,8 @@ abstract class Payment implements PaymentInterface
      */
     protected $amount;
 
+    protected $paymentDocuments;
+
     /**
      * Get id
      *
@@ -98,5 +100,4 @@ abstract class Payment implements PaymentInterface
     {
         $this->method = $method;
     }
-
 }

@@ -1,0 +1,22 @@
+Flowcode\FinancialBundle\Entity\Payment\PaymentDocument:
+    type: mappedSuperclass
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        amount:
+            type: float
+    manyToOne:
+        payment:
+            targetEntity: Flowcode\FinancialBundle\Model\Payment\PaymentInterface
+            joinColumn:
+                name: payment_id
+                referencedColumnName: id
+    oneToOne:
+        journalEntry:
+            targetEntity: Flowcode\FinancialBundle\Model\Core\JournalEntryInterface
+            joinColumn:
+                name: journal_entry_id
+                referencedColumnName: id
+    lifecycleCallbacks: {  }

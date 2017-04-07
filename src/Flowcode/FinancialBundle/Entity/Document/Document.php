@@ -5,6 +5,9 @@ namespace Flowcode\FinancialBundle\Entity\Document;
 use Flowcode\FinancialBundle\Model\Document\DocumentCategoryInterface;
 use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Flowcode\FinancialBundle\Model\Document\DocumentItemInterface;
+use Flowcode\FinancialBundle\Model\Payment\PaymentDocumentInterface;
+use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
 
 /**
  * Flowcode\FinancialBundle\Entity\Document\Document
@@ -78,7 +81,7 @@ abstract class Document implements DocumentInterface
     /**
      * @var ArrayCollection
      */
-    protected $payments;
+    protected $paymentsDocuments;
 
     /**
      * @var ArrayCollection
@@ -328,6 +331,78 @@ abstract class Document implements DocumentInterface
     }
 
     /**
+     * Add PaymentDocumentInterface
+     */
+    public function addPaymentDocument(PaymentDocumentInterface $payment)
+    {
+        $this->paymentsDocuments[] = $payment;
+        return $this->paymentsDocuments;
+    }
+    /**
+     * Remove PaymentDocumentInterface
+     */
+    public function removePaymentDocument(PaymentDocumentInterface $payment)
+    {
+        $this->paymentsDocuments->removeElement($payment);
+        return $this->paymentsDocuments;
+    }
+    /**
+     * Get Payments
+     */
+    public function getPaymentsDocuments()
+    {
+        return $this->paymentsDocuments;
+    }
+
+    /**
+     * Add Transaction
+     */
+    public function addTransaction(TransactionInterface $transaction)
+    {
+        $this->transactions[] = $transaction;
+        return $this;
+    }
+    /**
+     * Remove Transaction
+     */
+    public function removeTransaction(TransactionInterface $transaction)
+    {
+        $this->transactions->removeElement($transaction);
+        return $this->transactions;
+    }
+
+    /**
+     * Get Transactions
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+    /**
+     * Add items
+     */
+    public function addItem(DocumentItemInterface $items)
+    {
+        $this->items[] = $items;
+        return $this;
+    }
+    /**
+     * Remove items
+     */
+    public function removeItem(DocumentItemInterface $items)
+    {
+        $this->items->removeElement($items);
+        return $this->items;
+    }
+
+    /**
+     * Get items
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+    /**
      * Se actualiza el total pagado calculando nuevamente el valor.
      * @fecha   2017-04-05
      * @author Francisco Memoli Olmos
@@ -339,9 +414,8 @@ abstract class Document implements DocumentInterface
     {
         $totalToPay = $this->getTotal();
         $totalPayed = 0;
-        foreach ($this->getPayments() as $payment)
-        {
-            $totalPayed += $payment->getAmount();
+        foreach ($this->getPaymentsDocuments() as $paymentDocument) {
+            $totalPayed += $paymentDocument->getPayment()->getAmount();
         }
         $this->setTotalPayed($totalPayed);
         return $this;
@@ -362,5 +436,4 @@ abstract class Document implements DocumentInterface
         $this->setBalance($totalToPay - $totalPayed);
         return $this;
     }
-
 }

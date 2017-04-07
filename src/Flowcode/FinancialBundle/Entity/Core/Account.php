@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 
 /**
- * Account
+ * Flowcode\FinancialBundle\Entity\Core\Account
  */
 abstract class Account implements AccountInterface
 {
@@ -78,6 +78,11 @@ abstract class Account implements AccountInterface
      */
     protected $children;
 
+    /**
+     * @var float
+     */
+    protected $balance;
+    
     public function getId()
     {
         return $this->id;
@@ -121,6 +126,25 @@ abstract class Account implements AccountInterface
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+    * Get balance
+    * @return  float
+    */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+    
+    /**
+    * Set balance
+    * @return $this
+    */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+        return $this;
     }
 
     /**

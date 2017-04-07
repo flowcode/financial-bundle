@@ -1,0 +1,39 @@
+<?php
+
+namespace Flowcode\FinancialBundle\Service;
+
+use Flowcode\FinancialBundle\Model\Manager\JournalEntityManagerInterface;
+use Flowcode\FinancialBundle\Model\Core\JournalEntryInterface;
+use Flowcode\FinancialBundle\Entity\Core\Account;
+use Flowcode\FinancialBundle\Repository\JournalEntityRepository;
+
+/**
+ * Class Flowcode\FinancialBundle\Service\JournalEntityService
+ */
+class JournalEntityService implements JournalEntityManagerInterface
+{
+    private $journalEntityRepository;
+    public function __construct(JournalEntityRepository $journalEntityRepository)
+    {
+        $this->journalEntityRepository = $journalEntityRepository;
+    }
+    public function updateBalance(JournalEntryInterface $journal)
+    {
+        $account = $journal->getAccount();
+        // Me tiene que dar debito menos credito
+        $balance = $this->journalEntityRepository->getBalance($account);
+        if ($account->getType() == Account::TYPE_ASSET) {
+            $journal->setBalance($balance);
+        }
+        if ($account->getType() == Account::TYPE_LIABILITY) {
+            $journal->setBalance(-$balance);
+        }
+        if ($account->getType() == Account::TYPE_INCOME) {
+            $journal->setBalance(-$balance);
+        }
+        if ($account->getType() == Account::TYPE_EXPENSE) {
+            $journal->setBalance($balance);
+        }
+        return $journal;
+    }
+}

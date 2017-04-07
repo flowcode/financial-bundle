@@ -27,6 +27,11 @@ abstract class JournalEntry implements JournalEntryInterface
     protected $credit;
 
     /**
+     * @var float
+     */
+    protected $balance;
+
+    /**
      * @var \DateTime
      */
     protected $date;
@@ -87,7 +92,24 @@ abstract class JournalEntry implements JournalEntryInterface
     {
         return $this->credit;
     }
-
+    /**
+    * Get balance
+    * @return  float
+    */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+    
+    /**
+    * Set balance
+    * @return $this
+    */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+        return $this;
+    }
     /**
      * Set date
      *
@@ -143,7 +165,4 @@ abstract class JournalEntry implements JournalEntryInterface
     {
         $this->transaction = $transaction;
     }
-
-
 }
-

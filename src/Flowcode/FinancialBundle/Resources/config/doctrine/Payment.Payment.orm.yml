@@ -14,6 +14,6 @@ Flowcode\FinancialBundle\Entity\Payment\Payment:
         method:
             targetEntity: Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface
             joinColumn:
-                name: payment__id
+                name: payment_method_id
                 referencedColumnName: id
     lifecycleCallbacks: {  }

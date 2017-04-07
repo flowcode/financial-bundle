@@ -11,6 +11,8 @@ Flowcode\FinancialBundle\Entity\Core\JournalEntry:
             type: float
         credit:
             type: float
+        balance:
+            type: float
         date:
             type: datetime
 
