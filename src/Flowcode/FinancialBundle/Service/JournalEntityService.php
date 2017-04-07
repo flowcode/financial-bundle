@@ -22,18 +22,18 @@ class JournalEntityService implements JournalEntityManagerInterface
     {
         $account = $journal->getAccount();
         // Me tiene que dar debito menos credito
-        $balance = $this->journalEntityRepository->getBalance($account);
+        $balance = $account->getBalance();
         if ($account->getType() == Account::TYPE_ASSET) {
-            $journal->setBalance($balance);
+            $journal->setBalance($balance + ($journal->getDebit() - $journal->getCredit()));
         }
         if ($account->getType() == Account::TYPE_LIABILITY) {
-            $journal->setBalance(-$balance);
+            $journal->setBalance($balance + (-$journal->getDebit() + $journal->getCredit()));
         }
         if ($account->getType() == Account::TYPE_INCOME) {
-            $journal->setBalance(-$balance);
+            $journal->setBalance($balance + (- $journal->getDebit() + $journal->getCredit()));
         }
         if ($account->getType() == Account::TYPE_EXPENSE) {
-            $journal->setBalance($balance);
+            $journal->setBalance($balance + ($journal->getDebit() - $journal->getCredit()));
         }
         return $journal;
     }

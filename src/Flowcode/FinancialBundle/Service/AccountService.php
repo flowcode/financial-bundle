@@ -18,22 +18,4 @@ class AccountService implements AccountManagerInterface
     {
         $this->journalEntityRepository = $journalEntityRepository;
     }
-    public function updateBalance(AccountInterface $account)
-    {
-        // Me tiene que dar debito menos credito
-        $balance = $this->journalEntityRepository->getBalance($account);
-        if ($account->getType() == Account::TYPE_ASSET) {
-            $account->setBalance($balance);
-        }
-        if ($account->getType() == Account::TYPE_LIABILITY) {
-            $account->setBalance(-$balance);
-        }
-        if ($account->getType() == Account::TYPE_INCOME) {
-            $account->setBalance(-$balance);
-        }
-        if ($account->getType() == Account::TYPE_EXPENSE) {
-            $account->setBalance($balance);
-        }
-        return $account;
-    }
 }

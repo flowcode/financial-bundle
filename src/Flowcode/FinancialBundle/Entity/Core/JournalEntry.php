@@ -46,7 +46,11 @@ abstract class JournalEntry implements JournalEntryInterface
      */
     protected $transaction;
 
-
+    public function __construct()
+    {
+        $this->credit = 0;
+        $this->debit = 0;
+    }
     /**
      * Get id
      *

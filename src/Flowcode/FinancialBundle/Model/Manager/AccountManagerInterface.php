@@ -10,6 +10,5 @@ use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 interface AccountManagerInterface
 {
 
-    public function updateBalance(AccountInterface $accountInterface);
     
 }

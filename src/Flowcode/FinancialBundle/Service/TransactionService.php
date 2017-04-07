@@ -65,7 +65,6 @@ class TransactionService implements TransactionManagerInterface
     public function updateBalancesByTransaction(TransactionInterface $transaction)
     {
         foreach ($transaction->getJournalEntries() as $journal) {
-            $this->accountService->updateBalance($journal->getAccount());
             $this->journalEntityService->updateBalance($journal);
         }
     }

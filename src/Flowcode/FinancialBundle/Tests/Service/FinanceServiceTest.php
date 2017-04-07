@@ -61,7 +61,6 @@ class FinanceServiceTest extends BaseTestCase
                                 ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
-        $this->accountManagerInterface->expects($this->exactly(2))->method('updateBalance');
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
         $financeService = new FinanceService(
             $transactionService,
@@ -129,6 +128,7 @@ class FinanceServiceTest extends BaseTestCase
                                 ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
+        $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
         $paymentDocumentService = $this->getPaymentDocumentService();
         $financeService = new FinanceService(
             $transactionService,
