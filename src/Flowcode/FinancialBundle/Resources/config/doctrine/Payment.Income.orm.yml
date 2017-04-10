@@ -10,7 +10,7 @@ Flowcode\FinancialBundle\Entity\Payment\Income:
         name:
             type: string
             length: 255
-    oneToOne:
+    manyToOne:
         account:
             targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
             joinColumn:
