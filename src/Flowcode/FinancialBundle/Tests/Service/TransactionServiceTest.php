@@ -65,23 +65,6 @@ class TransactionServiceTest extends BaseTestCase
         $this->assertEquals(0, $transaction2->getJournalEntries()[1]->getCredit());
         $this->assertEquals($paymentMethodFinantialAccount, $transaction2->getJournalEntries()[1]->getAccount());
     }
-    private function getTransactionService()
-    {
-        $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $accountManagerInterface = $this->getMockBuilder(AccountService::class)
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $journalEntityManagerInterface = $this->getMockBuilder(JournalEntityService::class)
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
-        $callBack = $this->getMockCallbackForGetInstanceFromInterface();
-        $instanceManagerInterface
-             ->method('getInstanceFromInterface')
-             ->will($this->returnCallback($callBack));
-        return new TransactionService($instanceManagerInterface, $accountManagerInterface, $journalEntityManagerInterface);
-    }
     /**
      * Probamos que al enviar una cuenta de expense, paymentmethod y amount se cree una entidad
      * de transaccion con la las journalEntities correctas para un gasto.
@@ -132,7 +115,105 @@ class TransactionServiceTest extends BaseTestCase
         $this->assertEquals($amount, $transaction2->getJournalEntries()[1]->getCredit());
         $this->assertEquals($paymentMethodFinantialAccount, $transaction2->getJournalEntries()[1]->getAccount());
     }
+    /**
+     * Probamos que al enviar una cuenta de income, un cliente y amount se cree una entidad
+     * de transaccion con la las journalEntities correctas para un ingreso que se va a cobrar mas tarde.
+     * @fecha   2017-04-04
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function testCreateIncomeSaleOrderTransaction_returnTransactionWithJournalEntites()
+    {
+        $income = $this->getMockBuilder(Income::class)
+            ->getMockForAbstractClass();
+        $incomeFinantialAccount = $this->getMockBuilder(Account::class)
+            ->getMockForAbstractClass();
+        $income->setAccount($incomeFinantialAccount);
+
+        $clientAccount = $this->getMockBuilder(Account::class)
+            ->getMockForAbstractClass();
+        
+        $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
+
+        $transactionService = $this->getTransactionService();
+        $amount = 1000;
+        $transaction2 = $transactionService->createSaleOrderTrx($income, $clientAccount, $amount);
+
+        $this->assertEquals(0, $transaction2->getJournalEntries()[0]->getDebit());
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($incomeFinantialAccount, $transaction2->getJournalEntries()[0]->getAccount());
+
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[1]->getDebit());
+        $this->assertEquals(0, $transaction2->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($clientAccount, $transaction2->getJournalEntries()[1]->getAccount());
+    }
     
+    /**
+     * Probamos que al enviar una cuenta de cliente, un paymentDocument y amount se cree una entidad
+     * de transaccion con la las journalEntities correctas que indican el pago de un documento.
+     * @fecha   2017-04-04
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function testCreateIncomeSaleOrderPaymentTransaction_returnTransactionWithJournalEntites()
+    {
+        $paymentMethodFinantialAccount = $this->getMockBuilder(Account::class)
+            ->getMockForAbstractClass();
+        $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
+            ->getMockForAbstractClass();
+        $paymentMethod->setAccount($paymentMethodFinantialAccount);
+        $payment = $this->getMockBuilder(Payment::class)
+            ->getMockForAbstractClass();
+        $payment->setMethod($paymentMethod);
+
+        $paymentDocument = $this->getMockBuilder(PaymentDocument::class)
+            ->getMockForAbstractClass();
+        $paymentDocument->setPayment($payment);
+
+        $clientAccount = $this->getMockBuilder(Account::class)
+            ->getMockForAbstractClass();
+        
+        $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
+
+        $transactionService = $this->getTransactionService();
+        $amount = 1000;
+        $transaction2 = $transactionService->createSaleOrderPaymentTrx($clientAccount, $paymentDocument, $amount);
+
+        $this->assertEquals(0, $transaction2->getJournalEntries()[1]->getDebit());
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($clientAccount, $transaction2->getJournalEntries()[1]->getAccount());
+
+        $this->assertEquals($amount, $transaction2->getJournalEntries()[0]->getDebit());
+        $this->assertEquals(0, $transaction2->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($paymentMethodFinantialAccount, $transaction2->getJournalEntries()[0]->getAccount());
+    }
+    
+
+    private function getTransactionService()
+    {
+        $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
+        $accountManagerInterface = $this->getMockBuilder(AccountService::class)
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
+        $journalEntityManagerInterface = $this->getMockBuilder(JournalEntityService::class)
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
+        $callBack = $this->getMockCallbackForGetInstanceFromInterface();
+        $instanceManagerInterface
+             ->method('getInstanceFromInterface')
+             ->will($this->returnCallback($callBack));
+        return new TransactionService($instanceManagerInterface, $accountManagerInterface, $journalEntityManagerInterface);
+    }
     private function getMockCallbackForGetInstanceFromInterface()
     {
         return (

@@ -114,17 +114,6 @@ abstract class Transaction implements TransactionInterface
 
         return $this;
     }
-
-    /**
-     * Remove journalEntries
-     *
-     * @param JournalEntryInterface $journalEntry
-     */
-    public function removeJournalEntry(JournalEntryInterface $journalEntry)
-    {
-        $this->journalEntries->removeElement($journalEntry);
-    }
-
     /**
      * Get journalEntries
      *

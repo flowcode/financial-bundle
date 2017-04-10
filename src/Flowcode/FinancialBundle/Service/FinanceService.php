@@ -12,6 +12,7 @@ use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
 use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
 use Flowcode\FinancialBundle\Model\Payment\ExpenseInterface;
 use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
+use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 
 /**
  * Class FinanceService
@@ -46,6 +47,35 @@ class FinanceService implements FinanceManagerInterface
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
         
+        $this->transactionService->updateBalancesByTransaction($transaction);
+        $this->documentService->updateDocument($document);
+        return $document;
+    }
+    public function createSaleOrder(
+        DocumentInterface $document,
+        IncomeInterface $income,
+        AccountInterface $clientAccount
+    ) {
+        $amount = $document->getTotal();
+        
+        $transaction = $this->transactionService->createSaleOrderTrx($income, $clientAccount, $amount);
+        $document->addTransaction($transaction);
+
+        $this->transactionService->updateBalancesByTransaction($transaction);
+        return $document;
+    }
+    public function createSaleOrderPayment(
+        DocumentInterface $document,
+        AccountInterface $clientAccount,
+        PaymentMethodInterface $paymentMethod,
+        $paymentAmount
+    ) {
+        $payment = $this->paymentService->createPayment($paymentMethod, $paymentAmount);
+        $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $paymentAmount);
+        $transaction = $this->transactionService->createSaleOrderPaymentTrx($clientAccount, $paymentDocument, $paymentAmount);
+        $document->addTransaction($transaction);
+        $document->addPaymentDocument($paymentDocument);
+
         $this->transactionService->updateBalancesByTransaction($transaction);
         $this->documentService->updateDocument($document);
         return $document;

@@ -92,9 +92,186 @@ class FinanceServiceTest extends BaseTestCase
 
         $this->assertEquals($amount, $transaction->getJournalEntries()[1]->getDebit());
         $this->assertEquals(0, $transaction->getJournalEntries()[1]->getCredit());
-        $this->assertEquals($paymentMethodFinancialAccount, $transaction->getJournalEntries()[1]->getAccount());
+        $this->assertEquals($paymentMethodFinancialAccount, $transaction->getJournalEntries()[1]->getAccount());        
+    }
 
-        
+    /**
+     * Probamos que al enviar un documento con un amount, un income y una cuenta cree el documento con toda la informacion 
+     * correcta.
+     * @fecha   2017-04-04
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function testCreateSaleOrder_returnDocumentWithCorrectInformation()
+    {
+        $document = new DocumentMock();
+        $income = $this->getMockBuilder(Income::class)
+                       ->getMockForAbstractClass();
+        $incomeFinantialAccount = $this->getMockBuilder(Account::class)
+                                       ->getMockForAbstractClass();
+        $income->setAccount($incomeFinantialAccount);
+
+        $clientAccount = $this->getMockBuilder(Account::class)
+                                              ->getMockForAbstractClass();
+        $paymentService = $this->getPaymentService();
+        $paymentDocumentService = $this->getPaymentDocumentService();
+        $documentService = $this->getMockBuilder(DocumentService::class)
+                                ->disableOriginalConstructor()
+                                ->getMockForAbstractClass();
+
+        $transactionService = $this->getTransactionService();
+        $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+        $financeService = new FinanceService(
+            $transactionService,
+            $documentService,
+            $paymentService,
+            $paymentDocumentService
+        );
+        $amount = 1000;
+        $document->setTotal($amount);
+        $document = $financeService->createSaleOrder($document, $income, $clientAccount);
+
+        $this->assertEquals(0, $document->getTotalPayed());
+        $this->assertEquals(0, $document->getBalance());
+
+        $transactions = $document->getTransactions();
+        $this->assertEquals(1, count($transactions));
+        $transaction = $transactions[0];
+
+        $this->assertEquals(2, count($transaction->getJournalEntries()));
+
+        $this->assertEquals(0, count($document->getPaymentsDocuments()));
+
+        $this->assertEquals($amount, $transaction->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($incomeFinantialAccount, $transaction->getJournalEntries()[0]->getAccount());
+        $this->assertEquals(0, $transaction->getJournalEntries()[0]->getDebit());
+
+        $this->assertEquals($amount, $transaction->getJournalEntries()[1]->getDebit());
+        $this->assertEquals(0, $transaction->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($clientAccount, $transaction->getJournalEntries()[1]->getAccount());        
+    }
+
+    /**
+     * Dado un documento probamos agregar un pago al mismo por el monto total y que toda la informacion se actualize correctamente.
+     * @fecha   2017-04-04
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function testCreateSaleOrderPayment_returnDocumentWithCorrectInformation()
+    {
+        $document = new DocumentMock();
+        $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
+                              ->getMockForAbstractClass();
+        $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
+                                              ->getMockForAbstractClass();
+        $paymentMethod->setAccount($paymentMethodFinancialAccount);
+
+        $clientAccount = $this->getMockBuilder(Account::class)
+                                              ->getMockForAbstractClass();
+        $paymentService = $this->getPaymentService();
+        $paymentDocumentService = $this->getPaymentDocumentService();
+        $documentService = $this->getMockBuilder(DocumentService::class)
+                                ->disableOriginalConstructor()
+                                ->getMockForAbstractClass();
+
+        $transactionService = $this->getTransactionService();
+        $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+        $financeService = new FinanceService(
+            $transactionService,
+            $documentService,
+            $paymentService,
+            $paymentDocumentService
+        );
+        $amount = 1000;
+        $document->setTotal($amount);
+        $document = $financeService->createSaleOrderPayment($document, $clientAccount, $paymentMethod, $amount);
+
+        $this->assertEquals($amount, $document->getTotalPayed());
+        // No debe haber nada pendiente de pago
+        $this->assertEquals(0, $document->getBalance());
+        $this->assertEquals(Document::STATUS_PAID, $document->getStatus());
+
+        $transactions = $document->getTransactions();
+        $this->assertEquals(1, count($transactions));
+        $transaction = $transactions[0];
+
+        $this->assertEquals(2, count($transaction->getJournalEntries()));
+
+        $this->assertEquals(1, count($document->getPaymentsDocuments()));
+        $this->assertEquals($amount, $document->getPaymentsDocuments()[0]->getAmount());
+
+        $this->assertEquals(0, $transaction->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($amount, $transaction->getJournalEntries()[0]->getDebit());
+        $this->assertEquals($paymentMethodFinancialAccount, $transaction->getJournalEntries()[0]->getAccount());
+
+        $this->assertEquals(0, $transaction->getJournalEntries()[1]->getDebit());
+        $this->assertEquals($amount, $transaction->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($clientAccount, $transaction->getJournalEntries()[1]->getAccount());        
+    }
+
+    /**
+     * Dado un documento probamos agregar un pago a el mismo y que toda la informacion se actualize correctamente.
+     * @fecha   2017-04-04
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function testCreateSaleOrderPartialPayment_returnDocumentWithCorrectInformation()
+    {
+        $document = new DocumentMock();
+        $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
+                              ->getMockForAbstractClass();
+        $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
+                                              ->getMockForAbstractClass();
+        $paymentMethod->setAccount($paymentMethodFinancialAccount);
+
+        $clientAccount = $this->getMockBuilder(Account::class)
+                                              ->getMockForAbstractClass();
+        $paymentService = $this->getPaymentService();
+        $paymentDocumentService = $this->getPaymentDocumentService();
+        $documentService = $this->getMockBuilder(DocumentService::class)
+                                ->disableOriginalConstructor()
+                                ->getMockForAbstractClass();
+
+        $transactionService = $this->getTransactionService();
+        $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+        $financeService = new FinanceService(
+            $transactionService,
+            $documentService,
+            $paymentService,
+            $paymentDocumentService
+        );
+        $amount = 1000;
+        $paymentAmount = 100;
+        $document->setTotal($amount);
+        $document = $financeService->createSaleOrderPayment($document, $clientAccount, $paymentMethod, $paymentAmount);
+
+        $this->assertEquals($paymentAmount, $document->getTotalPayed());
+        // Debe haber nada pendiente de pago
+        $this->assertEquals($amount - $paymentAmount, $document->getBalance());
+        $this->assertNotEquals(Document::STATUS_PAID, $document->getStatus());
+
+        $transactions = $document->getTransactions();
+        $this->assertEquals(1, count($transactions));
+        $transaction = $transactions[0];
+
+        $this->assertEquals(2, count($transaction->getJournalEntries()));
+
+        $this->assertEquals(1, count($document->getPaymentsDocuments()));
+        $this->assertEquals($paymentAmount, $document->getPaymentsDocuments()[0]->getAmount());
+
+        $this->assertEquals(0, $transaction->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($paymentAmount, $transaction->getJournalEntries()[0]->getDebit());
+        $this->assertEquals($paymentMethodFinancialAccount, $transaction->getJournalEntries()[0]->getAccount());
+
+        $this->assertEquals(0, $transaction->getJournalEntries()[1]->getDebit());
+        $this->assertEquals($paymentAmount, $transaction->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($clientAccount, $transaction->getJournalEntries()[1]->getAccount());        
     }
 
     /**

@@ -13,12 +13,6 @@ interface TransactionInterface
      */
     public function addJournalEntry(JournalEntryInterface $journalEntry);
 
-    /**
-     * Remove journalEntries
-     *
-     * @param JournalEntryInterface $journalEntry
-     */
-    public function removeJournalEntry(JournalEntryInterface $journalEntry);
 
     /**
      * Get journalEntries

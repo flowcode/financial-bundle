@@ -13,28 +13,30 @@ use Doctrine\ORM\EntityRepository;
  */
 class JournalEntityService implements JournalEntityManagerInterface
 {
-    private $journalEntityRepository;
-    public function __construct(EntityRepository $journalEntityRepository)
-    {
-        $this->journalEntityRepository = $journalEntityRepository;
-    }
+    /**
+     * Carga en el journal y en la cuenta el balance actual.
+     * @param  JournalEntryInterface $journal [description]
+     * @return [type]                         [description]
+     */
     public function updateBalance(JournalEntryInterface $journal)
     {
         $account = $journal->getAccount();
         // Me tiene que dar debito menos credito
         $balance = $account->getBalance();
         if ($account->getType() == Account::TYPE_ASSET) {
-            $journal->setBalance($balance + ($journal->getDebit() - $journal->getCredit()));
+            $balance = $balance + ($journal->getDebit() - $journal->getCredit());
         }
         if ($account->getType() == Account::TYPE_LIABILITY) {
-            $journal->setBalance($balance + (-$journal->getDebit() + $journal->getCredit()));
+            $balance = $balance + (-$journal->getDebit() + $journal->getCredit());
         }
         if ($account->getType() == Account::TYPE_INCOME) {
-            $journal->setBalance($balance + (- $journal->getDebit() + $journal->getCredit()));
+            $balance = $balance + (- $journal->getDebit() + $journal->getCredit());
         }
         if ($account->getType() == Account::TYPE_EXPENSE) {
-            $journal->setBalance($balance + ($journal->getDebit() - $journal->getCredit()));
+            $balance = $balance + ($journal->getDebit() - $journal->getCredit());
         }
+        $journal->setBalance($balance);
+        $account->setBalance($balance);
         return $journal;
     }
 }

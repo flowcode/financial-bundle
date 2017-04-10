@@ -75,7 +75,7 @@ class TransactionService implements TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    public function createSaleTrx(
+    public function createSaleOrderTrx(
         IncomeInterface $income,
         AccountInterface $clientAccount,
         $amount
@@ -91,7 +91,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryIncome->setCredit($amount);
         $journalEntryIncome->setAccount($income->getAccount());
         $journalEntryAsset->setDebit($amount);
-        $journalEntryAsset->setAccount($clientAccount->getAccount());
+        $journalEntryAsset->setAccount($clientAccount);
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
         return $transaction;
@@ -104,7 +104,7 @@ class TransactionService implements TransactionManagerInterface
      * @param $amount
      * @return mixed
      */
-    public function createSalePaymentTrx(
+    public function createSaleOrderPaymentTrx(
         AccountInterface $clientAccount,
         PaymentDocumentInterface $paymentDocument,
         $amount
@@ -121,7 +121,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryIncome->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
         $paymentDocument->setJournalEntry($journalEntryIncome);
         $journalEntryAsset->setCredit($amount);
-        $journalEntryAsset->setAccount($clientAccount->getAccount());
+        $journalEntryAsset->setAccount($clientAccount);
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
         return $transaction;

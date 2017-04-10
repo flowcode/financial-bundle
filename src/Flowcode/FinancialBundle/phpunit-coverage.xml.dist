@@ -15,6 +15,9 @@
     <filter>
         <whitelist>
             <directory>*</directory>
+            <exclude>
+                    <directory>Tests</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>

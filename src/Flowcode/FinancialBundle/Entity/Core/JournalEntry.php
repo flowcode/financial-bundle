@@ -7,7 +7,7 @@ use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 
 /**
- * JournalEntry
+ * Flowcode\FinancialBundle\Entity\Core\JournalEntry
  */
 abstract class JournalEntry implements JournalEntryInterface
 {
