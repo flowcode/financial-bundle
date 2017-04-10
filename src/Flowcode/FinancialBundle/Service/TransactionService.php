@@ -18,16 +18,16 @@ use Flowcode\FinancialBundle\Model\Core\AccountInterface;
  */
 class TransactionService implements TransactionManagerInterface
 {
+
     /**
      * @var InstanceManagerInterface
      */
     protected $instanceService;
 
     public function __construct(
-        InstanceManagerInterface $instanceService,
-        AccountManagerInterface $accountService,
-        JournalEntityManagerInterface $journalEntityService
-    ) {
+    InstanceManagerInterface $instanceService, AccountManagerInterface $accountService, JournalEntityManagerInterface $journalEntityService
+    )
+    {
         $this->instanceService = $instanceService;
         $this->accountService = $accountService;
         $this->journalEntityService = $journalEntityService;
@@ -41,10 +41,9 @@ class TransactionService implements TransactionManagerInterface
      * @return mixed
      */
     public function createIncomeTrx(
-        IncomeInterface $income,
-        PaymentDocumentInterface $paymentDocument,
-        $amount
-    ) {
+    IncomeInterface $income, PaymentDocumentInterface $paymentDocument, $amount
+    )
+    {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
@@ -55,19 +54,25 @@ class TransactionService implements TransactionManagerInterface
         $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryIncome->setCredit($amount);
         $journalEntryIncome->setAccount($income->getAccount());
+        $journalEntryIncome->setDate(new \DateTime());
         $journalEntryAsset->setDebit($amount);
         $journalEntryAsset->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
+        $journalEntryAsset->setDate(new \DateTime());
         $paymentDocument->setJournalEntry($journalEntryAsset);
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
+        $transaction->setDate(new \DateTime());
         return $transaction;
     }
+
     public function updateBalancesByTransaction(TransactionInterface $transaction)
     {
-        foreach ($transaction->getJournalEntries() as $journal) {
+        foreach ($transaction->getJournalEntries() as $journal)
+        {
             $this->journalEntityService->updateBalance($journal);
         }
     }
+
     /**
      * Creación de movimientos para una venta que va a ser pagada en un futuro.
      * @param IncomeInterface $income
@@ -76,10 +81,9 @@ class TransactionService implements TransactionManagerInterface
      * @return mixed
      */
     public function createSaleOrderTrx(
-        IncomeInterface $income,
-        AccountInterface $clientAccount,
-        $amount
-    ) {
+    IncomeInterface $income, AccountInterface $clientAccount, $amount
+    )
+    {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo Cuenta del cliente que debe
@@ -105,10 +109,9 @@ class TransactionService implements TransactionManagerInterface
      * @return mixed
      */
     public function createSaleOrderPaymentTrx(
-        AccountInterface $clientAccount,
-        PaymentDocumentInterface $paymentDocument,
-        $amount
-    ) {
+    AccountInterface $clientAccount, PaymentDocumentInterface $paymentDocument, $amount
+    )
+    {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo Cuenta del cliente que debe
@@ -134,10 +137,9 @@ class TransactionService implements TransactionManagerInterface
      * @return mixed
      */
     public function createExpenseTrx(
-        ExpenseInterface $expense,
-        PaymentDocumentInterface $paymentDocument,
-        $amount
-    ) {
+    ExpenseInterface $expense, PaymentDocumentInterface $paymentDocument, $amount
+    )
+    {
         //Egreso
         $journalEntryExpense = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
@@ -148,10 +150,17 @@ class TransactionService implements TransactionManagerInterface
         $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryExpense->setDebit($amount);
         $journalEntryExpense->setAccount($expense->getAccount());
+        $journalEntryExpense->setDate(new \DateTime());
+
         $journalEntryAsset->setCredit($amount);
         $journalEntryAsset->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
+        $journalEntryAsset->setDate(new \DateTime());
+
         $transaction->addJournalEntry($journalEntryExpense);
         $transaction->addJournalEntry($journalEntryAsset);
+        $transaction->setDate(new \DateTime());
+
         return $transaction;
     }
+
 }

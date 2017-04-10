@@ -96,6 +96,7 @@ abstract class Document implements DocumentInterface
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->paymentsDocuments = new ArrayCollection();
     }
 
     /**

@@ -11,6 +11,9 @@ use Flowcode\FinancialBundle\Model\Payment\PaymentInterface;
 abstract class Payment implements PaymentInterface
 {
 
+    const TYPE_INCOME = 'income';
+    const TYPE_EXPENSE = 'expense';
+
     /**
      * @var int
      */
@@ -30,7 +33,6 @@ abstract class Payment implements PaymentInterface
      * @var float
      */
     protected $amount;
-
     protected $paymentDocuments;
 
     /**
@@ -100,4 +102,5 @@ abstract class Payment implements PaymentInterface
     {
         $this->method = $method;
     }
+
 }

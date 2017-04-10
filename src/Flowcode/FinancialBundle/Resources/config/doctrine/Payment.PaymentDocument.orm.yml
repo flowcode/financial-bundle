@@ -13,6 +13,7 @@ Flowcode\FinancialBundle\Entity\Payment\PaymentDocument:
             joinColumn:
                 name: payment_id
                 referencedColumnName: id
+            cascade: ["persist"]
     oneToOne:
         journalEntry:
             targetEntity: Flowcode\FinancialBundle\Model\Core\JournalEntryInterface
