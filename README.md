@@ -23,9 +23,11 @@ Document:
     transactions:
       targetEntity: Flowcode\FinancialBundle\Entity\Core\Transaction
       mappedBy: document
+      cascade: ["persist"]
     paymentsDocuments:
       targetEntity: Flowcode\FinancialBundle\Entity\Payment\PaymentDocument
       mappedBy: document
+      cascade: ["persist"]
 ```
 payment -> paymentDocument
 ```
@@ -35,6 +37,7 @@ Payment:
     paymentDocuments:
       targetEntity: Flowcode\FinancialBundle\Entity\Payment\PaymentDocument
       mappedBy: payment
+      cascade: ["persist"]
 ```
 transaction -> journalEntries
 ```
@@ -44,4 +47,5 @@ Transaction:
     journalEntries:
       targetEntity: Flowcode\FinancialBundle\Entity\Core\JournalEntry
       mappedBy: transaction
+      cascade: ["persist"]
 ```
