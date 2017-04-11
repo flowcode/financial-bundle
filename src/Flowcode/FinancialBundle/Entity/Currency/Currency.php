@@ -10,12 +10,12 @@ abstract class Currency
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
 
     /**
@@ -50,4 +50,3 @@ abstract class Currency
         return $this->name;
     }
 }
-

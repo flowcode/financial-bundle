@@ -36,4 +36,9 @@ Flowcode\FinancialBundle\Entity\Document\Document:
             joinColumn:
                 name: document_category_id
                 referencedColumnName: id
+        currency:
+            targetEntity: Flowcode\FinancialBundle\Model\Currency\CurrencyInterface
+            joinColumn:
+                name: currency
+                referencedColumnName: id
     lifecycleCallbacks: {  }

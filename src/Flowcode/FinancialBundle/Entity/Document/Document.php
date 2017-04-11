@@ -64,6 +64,10 @@ abstract class Document implements DocumentInterface
     protected $dueDate;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+    /**
      * @var float
      */
     protected $total;
@@ -294,6 +298,17 @@ abstract class Document implements DocumentInterface
     {
         $this->status = $status;
         return $this;
+    }
+
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
     }
 
     /**
