@@ -1,7 +1,6 @@
 Flowcode\FinancialBundle\Entity\Payment\Income:
 
     type: mappedSuperclass
-
     id:
         id:
             type: integer
@@ -10,10 +9,15 @@ Flowcode\FinancialBundle\Entity\Payment\Income:
         name:
             type: string
             length: 255
-    manyToOne:
-        account:
-            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
-            joinColumn:
-                name: account_id
+    manyToMany:
+        accounts:
+          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+          joinTable:
+            name: financial_income_account
+            joinColumns:
+              income_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              account_id:
                 referencedColumnName: id
     lifecycleCallbacks: {  }

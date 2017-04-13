@@ -4,12 +4,14 @@ namespace Flowcode\FinancialBundle\Entity\Payment;
 
 use Flowcode\FinancialBundle\Model\Payment\IncomeInterface;
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Flowcode\FinancialBundle\Entity\Payment\Income
  */
 abstract class Income implements IncomeInterface
 {
+
     /**
      * @var int
      */
@@ -20,10 +22,12 @@ abstract class Income implements IncomeInterface
      */
     protected $name;
 
-    /**
-     * @var AccountInterface
-     */
-    protected $account;
+    protected $accounts;
+
+    public function __construct()
+    {
+        $this->accounts = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -60,18 +64,27 @@ abstract class Income implements IncomeInterface
     }
 
     /**
-     * @return AccountInterface
+     * @return ArrayCollection<AccountInterface>
      */
-    public function getAccount(): AccountInterface
+    public function getAccounts()
     {
-        return $this->account;
+        return $this->accounts;
+    }
+
+    /**
+     * @param ArrayCollection<AccountInterface> $accounts
+     */
+    public function setAccounts($accounts)
+    {
+        $this->accounts = $accounts;
     }
 
     /**
      * @param AccountInterface $account
      */
-    public function setAccount(AccountInterface $account)
+    public function addAccount($account)
     {
-        $this->account = $account;
+        $this->accounts->add($account);
     }
+
 }

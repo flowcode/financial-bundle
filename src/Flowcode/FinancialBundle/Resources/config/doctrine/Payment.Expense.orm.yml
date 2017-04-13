@@ -10,10 +10,15 @@ Flowcode\FinancialBundle\Entity\Payment\Expense:
         name:
             type: string
             length: 255
-    manyToOne:
-        account:
-            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
-            joinColumn:
-                name: account_id
+    manyToMany:
+        accounts:
+          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+          joinTable:
+            name: financial_expense_account
+            joinColumns:
+              expense_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              account_id:
                 referencedColumnName: id
     lifecycleCallbacks: {  }

@@ -4,12 +4,14 @@ namespace Flowcode\FinancialBundle\Entity\Payment;
 
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 use Flowcode\FinancialBundle\Model\Payment\ExpenseInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Expense
  */
 abstract class Expense implements ExpenseInterface
 {
+
     /**
      * @var int
      */
@@ -19,12 +21,12 @@ abstract class Expense implements ExpenseInterface
      * @var string
      */
     protected $name;
+    protected $accounts;
 
-
-    /**
-     * @var AccountInterface
-     */
-    protected $account;
+    public function __construct()
+    {
+        $this->accounts = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -61,18 +63,27 @@ abstract class Expense implements ExpenseInterface
     }
 
     /**
-     * @return AccountInterface
+     * @return ArrayCollection<AccountInterface>
      */
-    public function getAccount(): AccountInterface
+    public function getAccounts()
     {
-        return $this->account;
+        return $this->accounts;
+    }
+
+    /**
+     * @param ArrayCollection<AccountInterface> $accounts
+     */
+    public function setAccounts($accounts)
+    {
+        $this->accounts = $accounts;
     }
 
     /**
      * @param AccountInterface $account
      */
-    public function setAccount(AccountInterface $account)
+    public function addAccount($account)
     {
-        $this->account = $account;
+        $this->accounts->add($account);
     }
+
 }
