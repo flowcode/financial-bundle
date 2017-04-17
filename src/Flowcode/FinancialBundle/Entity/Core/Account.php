@@ -4,12 +4,14 @@ namespace Flowcode\FinancialBundle\Entity\Core;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
+use Flowcode\FinancialBundle\Model\Currency\CurrencyInterface;
 
 /**
  * Flowcode\FinancialBundle\Entity\Core\Account
  */
 abstract class Account implements AccountInterface
 {
+
     const TYPE_ASSET = 1;
     const TYPE_LIABILITY = 2;
     const TYPE_EQUITY = 3;
@@ -82,13 +84,13 @@ abstract class Account implements AccountInterface
      * @var float
      */
     protected $balance;
-    
+
+    protected $currency;
+
     public function getId()
     {
         return $this->id;
     }
-
-
 
     public function getRoot()
     {
@@ -104,6 +106,7 @@ abstract class Account implements AccountInterface
     {
         return $this->parent;
     }
+
     /**
      * Set code
      *
@@ -129,18 +132,18 @@ abstract class Account implements AccountInterface
     }
 
     /**
-    * Get balance
-    * @return  float
-    */
+     * Get balance
+     * @return  float
+     */
     public function getBalance()
     {
         return $this->balance;
     }
-    
+
     /**
-    * Set balance
-    * @return $this
-    */
+     * Set balance
+     * @return $this
+     */
     public function setBalance($balance)
     {
         $this->balance = $balance;
@@ -240,4 +243,15 @@ abstract class Account implements AccountInterface
     {
         return $this->editable;
     }
+
+    public function getCurrency() : CurrencyInterface
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(CurrencyInterface $currency)
+    {
+        $this->currency = $currency;
+    }
+
 }

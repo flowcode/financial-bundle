@@ -2,10 +2,12 @@
 
 namespace Flowcode\FinancialBundle\Entity\Currency;
 
+use Flowcode\FinancialBundle\Model\Currency\CurrencyInterface;
+
 /**
  * Currency
  */
-abstract class Currency
+abstract class Currency implements CurrencyInterface
 {
     /**
      * @var int

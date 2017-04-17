@@ -39,23 +39,28 @@ Flowcode\FinancialBundle\Entity\Core\Account:
         balance:
             type: float
     manyToOne:
+        currency:
+            targetEntity: Flowcode\FinancialBundle\Model\Currency\CurrencyInterface
+            joinColumn:
+                name: currency
+                referencedColumnName: id
         root:
-          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
-          joinColumn:
-            name: tree_root
-            referencedColumnName: id
-            onDelete: CASCADE
-          gedmo:
-            - treeRoot
+            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+            joinColumn:
+              name: tree_root
+              referencedColumnName: id
+              onDelete: CASCADE
+            gedmo:
+              - treeRoot
         parent:
-          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
-          inversedBy: children
-          joinColumn:
-            name: parent_id
-            referencedColumnName: id
-            onDelete: CASCADE
-          gedmo:
-            - treeParent
+            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+            inversedBy: children
+            joinColumn:
+              name: parent_id
+              referencedColumnName: id
+              onDelete: CASCADE
+            gedmo:
+              - treeParent
 # No se puede agergar en el abstract
 #        oneToMany:
 #        children:

@@ -119,19 +119,21 @@ class TransactionService implements TransactionManagerInterface
      * @return mixed
      */
     public function createSaleOrderTrx(
-    IncomeInterface $income, AccountInterface $clientAccount, $amount
+    IncomeInterface $income, CurrencyInterface $currency, AccountInterface $clientAccount, $amount
     )
     {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo Cuenta del cliente que debe
         $journalEntryAsset = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
+
+        $accountIncome = $this->getAccountIncomeCurrency($income, $currency);
         /**
          * @var TransactionInterface $transaction
          */
         $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryIncome->setCredit($amount);
-        $journalEntryIncome->setAccount($income->getAccount());
+        $journalEntryIncome->setAccount($accountIncome);
         $journalEntryAsset->setDebit($amount);
         $journalEntryAsset->setAccount($clientAccount);
         $transaction->addJournalEntry($journalEntryIncome);
@@ -170,20 +172,31 @@ class TransactionService implements TransactionManagerInterface
 
     private function getAccountIncomeCurrency(IncomeInterface $income, CurrencyInterface $currency)
     {
+        $accountIncome = null;
         foreach ($income->getAccounts() as $currentAccount) {
             if ($currentAccount->getCurrency()->getId() == $currency->getId()) {
-                return $currentAccount;
+                $accountIncome = $currentAccount;
             }
         }
+        if ($accountIncome == null) {
+            throw new \InvalidArgumentException("account:income:not:found");
+        }
+        return $accountIncome;
     }
 
     private function getAccountExpenseCurrency(ExpenseInterface $expense, CurrencyInterface $currency)
     {
+        $accountExpense = null;
+
         foreach ($expense->getAccounts() as $currentAccount) {
             if ($currentAccount->getCurrency()->getId() == $currency->getId()) {
-                return $currentAccount;
+                $accountExpense = $currentAccount;
             }
         }
+        if ($accountExpense == null) {
+            throw new \InvalidArgumentException("account:expense:not:found");
+        }
+        return $accountExpense;
     }
 
 }

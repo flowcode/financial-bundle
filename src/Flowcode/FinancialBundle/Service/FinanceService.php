@@ -57,8 +57,9 @@ class FinanceService implements FinanceManagerInterface
     )
     {
         $amount = $document->getTotal();
+        $currency = $document->getCurrency();
 
-        $transaction = $this->transactionService->createSaleOrderTrx($income, $clientAccount, $amount);
+        $transaction = $this->transactionService->createSaleOrderTrx($income, $currency, $clientAccount, $amount);
         $document->addTransaction($transaction);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
