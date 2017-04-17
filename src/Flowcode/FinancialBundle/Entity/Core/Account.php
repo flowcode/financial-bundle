@@ -39,9 +39,9 @@ abstract class Account implements AccountInterface
     protected $type;
 
     /**
-     * @var int
+     * @var String
      */
-    protected $subType;
+    protected $subtype;
 
     /**
      * @var bool
@@ -199,13 +199,13 @@ abstract class Account implements AccountInterface
     /**
      * Set subtype
      *
-     * @param integer $subtype
+     * @param String $subtype
      *
      * @return AccountInterface
      */
     public function setSubtype($subtype)
     {
-        $this->subType = $subtype;
+        $this->subtype = $subtype;
 
         return $this;
     }
@@ -213,11 +213,11 @@ abstract class Account implements AccountInterface
     /**
      * Get subtype
      *
-     * @return int
+     * @return String
      */
     public function getSubtype()
     {
-        return $this->subType;
+        return $this->subtype;
     }
 
     /**

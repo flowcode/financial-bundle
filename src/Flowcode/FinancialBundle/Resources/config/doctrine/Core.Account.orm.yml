@@ -19,8 +19,9 @@ Flowcode\FinancialBundle\Entity\Core\Account:
             length: 255
         type:
             type: integer
-        subType:
-            type: integer
+        subtype:
+            type: string
+            length: 255
             nullable: true
         editable:
             type: boolean
