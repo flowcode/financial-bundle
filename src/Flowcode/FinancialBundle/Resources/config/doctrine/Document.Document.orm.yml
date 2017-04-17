@@ -17,6 +17,9 @@ Flowcode\FinancialBundle\Entity\Document\Document:
             type: string
             length: 255
             nullable: true
+        status:
+            type: string
+            length: 255
         date:
             type: datetime
         balance:
