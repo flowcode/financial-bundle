@@ -42,8 +42,8 @@ class FinanceService implements FinanceManagerInterface
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
         $payment->setType(Payment::TYPE_INCOME);
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
-
-        $transaction = $this->transactionService->createIncomeTrx($income, $paymentDocument, $amount);
+        $currency = $document->getCurrency();
+        $transaction = $this->transactionService->createIncomeTrx($income, $currency, $paymentDocument, $amount);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 
@@ -88,8 +88,8 @@ class FinanceService implements FinanceManagerInterface
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
         $payment->setType(Payment::TYPE_EXPENSE);
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
-
-        $transaction = $this->transactionService->createExpenseTrx($expense, $paymentDocument, $amount);
+        $currency = $document->getCurrency();
+        $transaction = $this->transactionService->createExpenseTrx($expense, $currency, $paymentDocument, $amount);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 
