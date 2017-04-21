@@ -134,10 +134,16 @@ class TransactionService implements TransactionManagerInterface
         $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryIncome->setCredit($amount);
         $journalEntryIncome->setAccount($accountIncome);
+        $journalEntryIncome->setDate(new \DateTime());
+
         $journalEntryAsset->setDebit($amount);
         $journalEntryAsset->setAccount($clientAccount);
+        $journalEntryAsset->setDate(new \DateTime());
+
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
+        $transaction->setDate(new \DateTime());
+
         return $transaction;
     }
 
@@ -162,11 +168,17 @@ class TransactionService implements TransactionManagerInterface
         $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryIncome->setDebit($amount);
         $journalEntryIncome->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
+        $journalEntryIncome->setDate(new \DateTime());
+
         $paymentDocument->setJournalEntry($journalEntryIncome);
         $journalEntryAsset->setCredit($amount);
         $journalEntryAsset->setAccount($clientAccount);
+        $journalEntryAsset->setDate(new \DateTime());
+
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
+        $transaction->setDate(new \DateTime());
+
         return $transaction;
     }
 
