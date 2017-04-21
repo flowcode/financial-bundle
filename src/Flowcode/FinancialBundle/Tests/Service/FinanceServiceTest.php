@@ -65,9 +65,6 @@ class FinanceServiceTest extends BaseTestCase
         $paymentService = $this->getPaymentService();
         $paymentDocumentService = $this->getPaymentDocumentService();
 
-
-
-
         $documentService = $this->getMockBuilder(DocumentService::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();

@@ -24,19 +24,26 @@ class JournalEntityService implements JournalEntityManagerInterface
         // Me tiene que dar debito menos credito
         $balance = $account->getBalance();
         if ($account->getType() == Account::TYPE_ASSET) {
-            $balance = $balance + ($journal->getDebit() - $journal->getCredit());
+            $balanceDiff = ($journal->getDebit() - $journal->getCredit());
         }
         if ($account->getType() == Account::TYPE_LIABILITY) {
-            $balance = $balance + (-$journal->getDebit() + $journal->getCredit());
+            $balanceDiff = (-$journal->getDebit() + $journal->getCredit());
         }
         if ($account->getType() == Account::TYPE_INCOME) {
-            $balance = $balance + (- $journal->getDebit() + $journal->getCredit());
+            $balanceDiff = (- $journal->getDebit() + $journal->getCredit());
         }
         if ($account->getType() == Account::TYPE_EXPENSE) {
-            $balance = $balance + ($journal->getDebit() - $journal->getCredit());
+            $balanceDiff = ($journal->getDebit() - $journal->getCredit());
         }
-        $journal->setBalance($balance);
-        $account->setBalance($balance);
+        $journal->setBalance($balance + $balanceDiff);
+        $account->setBalance($balance + $balanceDiff);
+        //Update all the tree.
+        $parent = $account->getParent();
+        while ($parent !== null) {
+            $balance = $parent->getBalance();
+            $parent->setBalance($balance + $balanceDiff);
+            $parent = $parent->getParent();
+        }
         return $journal;
     }
 }
