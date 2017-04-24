@@ -189,6 +189,42 @@ class TransactionService implements TransactionManagerInterface
         return $transaction;
     }
 
+    /**
+     * @param ExpenseInterface $expense
+     * @param PaymentDocumentInterface $paymentDocument
+     * @param $amount
+     * @return mixed
+     */
+    public function createExpenseAccountTrx(
+    AccountInterface $clientAccount, CurrencyInterface $currency, PaymentDocumentInterface $paymentDocument, $amount
+    )
+    {
+        //Egreso
+        $journalEntryExpense = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
+        //Activo
+        $journalEntryAsset = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
+
+        $accountPaymentMethod = $this->getAccountPaymentMethodCurrency($paymentDocument->getPayment()->getMethod(), $currency);
+
+        /**
+         * @var TransactionInterface $transaction
+         */
+        $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
+        $journalEntryExpense->setDebit($amount);
+        $journalEntryExpense->setAccount($clientAccount);
+        $journalEntryExpense->setDate(new \DateTime());
+
+        $journalEntryAsset->setCredit($amount);
+        $journalEntryAsset->setAccount($accountPaymentMethod);
+        $journalEntryAsset->setDate(new \DateTime());
+
+        $transaction->addJournalEntry($journalEntryExpense);
+        $transaction->addJournalEntry($journalEntryAsset);
+        $transaction->setDate(new \DateTime());
+
+        return $transaction;
+    }
+
     private function getAccountIncomeCurrency(IncomeInterface $income, CurrencyInterface $currency)
     {
         $accountIncome = null;

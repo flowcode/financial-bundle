@@ -101,4 +101,22 @@ class FinanceService implements FinanceManagerInterface
         return $document;
     }
 
+    public function createExpenseAccount(
+    DocumentInterface $document, AccountInterface $clientAccount, PaymentMethodInterface $paymentMethod
+    )
+    {
+        $amount = $document->getTotal();
+        $payment = $this->paymentService->createPayment($paymentMethod, $amount);
+        $payment->setType(Payment::TYPE_EXPENSE);
+        $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
+        $currency = $document->getCurrency();
+        $transaction = $this->transactionService->createExpenseAccountTrx($clientAccount, $currency, $paymentDocument, $amount);
+        $document->addTransaction($transaction);
+        $document->addPaymentDocument($paymentDocument);
+
+        $this->transactionService->updateBalancesByTransaction($transaction);
+        $this->documentService->updateDocument($document);
+        return $document;
+    }
+
 }

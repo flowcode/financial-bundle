@@ -313,13 +313,14 @@ class FinanceServiceTest extends BaseTestCase
      * @version [version]
      * @return  [type]                  [description]
      */
-    public function testCreateExpenseSale_returnDocumentWithCorrectInformation()
+    public function testCreateInstantExpense_returnDocumentWithCorrectInformation()
     {
         $document = new DocumentMock();
         $expense = $this->getMockBuilder(Expense::class)
                 ->getMockForAbstractClass();
         $expenseFinantialAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
+
 
         $currency = $this->getMockBuilder(Currency::class)
                 ->setMethods(['getId'])
@@ -370,6 +371,74 @@ class FinanceServiceTest extends BaseTestCase
         $this->assertEquals(0, $transaction->getJournalEntries()[0]->getCredit());
         $this->assertEquals($amount, $transaction->getJournalEntries()[0]->getDebit());
         $this->assertEquals($expenseFinantialAccount, $transaction->getJournalEntries()[0]->getAccount());
+
+        $this->assertEquals(0, $transaction->getJournalEntries()[1]->getDebit());
+        $this->assertEquals($amount, $transaction->getJournalEntries()[1]->getCredit());
+        $this->assertEquals($paymentMethodFinancialAccount, $transaction->getJournalEntries()[1]->getAccount());
+    }
+
+    /**
+     * Probamos que al enviar un documento con un amount, un cuenta del cliente y el metodo de pago se creen
+     * correctamente toda la informacion relacionado a el documento de un gasto instantanea.
+     * @fecha   2017-04-04
+     * @author Francisco Memoli Olmos
+     * @email   fmemoli@flowcode.com.ar
+     * @version [version]
+     * @return  [type]                  [description]
+     */
+    public function testCreateExpenseClient_returnDocumentWithCorrectInformation()
+    {
+        $document = new DocumentMock();
+        $clientFinantialAccount = $this->getMockBuilder(Account::class)
+                ->getMockForAbstractClass();
+
+        $currency = $this->getMockBuilder(Currency::class)
+                ->setMethods(['getId'])
+                ->getMockForAbstractClass();
+        $currency
+                ->method('getId')
+                ->willReturn(1);
+        $clientFinantialAccount->setCurrency($currency);
+
+        $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
+                ->getMockForAbstractClass();
+        $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
+                ->getMockForAbstractClass();
+
+        $paymentMethodFinancialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinancialAccount);
+
+        $paymentService = $this->getPaymentService();
+
+        $documentService = $this->getMockBuilder(DocumentService::class)
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+
+        $transactionService = $this->getTransactionService();
+        $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+        $paymentDocumentService = $this->getPaymentDocumentService();
+        $financeService = new FinanceService(
+                $transactionService, $documentService, $paymentService, $paymentDocumentService
+        );
+        $amount = 1000;
+        $document->setCurrency($currency);
+        $document->setTotal($amount);
+        $document = $financeService->createExpenseAccount($document, $clientFinantialAccount, $paymentMethod);
+
+        $this->assertEquals($amount, $document->getTotalPayed());
+        $this->assertEquals(0, $document->getBalance());
+        $this->assertEquals(Document::STATUS_PAID, $document->getStatus());
+
+        $transactions = $document->getTransactions();
+        $this->assertEquals(1, count($transactions));
+        $transaction = $transactions[0];
+        $this->assertEquals(2, count($transaction->getJournalEntries()));
+        $this->assertEquals(1, count($document->getPaymentsDocuments()));
+        $this->assertEquals($amount, $document->getPaymentsDocuments()[0]->getAmount());
+
+        $this->assertEquals(0, $transaction->getJournalEntries()[0]->getCredit());
+        $this->assertEquals($amount, $transaction->getJournalEntries()[0]->getDebit());
+        $this->assertEquals($clientFinantialAccount, $transaction->getJournalEntries()[0]->getAccount());
 
         $this->assertEquals(0, $transaction->getJournalEntries()[1]->getDebit());
         $this->assertEquals($amount, $transaction->getJournalEntries()[1]->getCredit());
