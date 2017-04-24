@@ -70,9 +70,11 @@ class FinanceService implements FinanceManagerInterface
     DocumentInterface $document, AccountInterface $clientAccount, PaymentMethodInterface $paymentMethod, $paymentAmount
     )
     {
+        $currency = $document->getCurrency();
+
         $payment = $this->paymentService->createPayment($paymentMethod, $paymentAmount);
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $paymentAmount);
-        $transaction = $this->transactionService->createSaleOrderPaymentTrx($clientAccount, $paymentDocument, $paymentAmount);
+        $transaction = $this->transactionService->createSaleOrderPaymentTrx($clientAccount, $currency, $paymentDocument, $paymentAmount);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 

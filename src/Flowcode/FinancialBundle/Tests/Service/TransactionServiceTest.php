@@ -51,7 +51,10 @@ class TransactionServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinantialAccount);
+
+        $paymentMethodFinantialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinantialAccount);
+
         $payment = $this->getMockBuilder(Payment::class)
                 ->getMockForAbstractClass();
         $payment->setMethod($paymentMethod);
@@ -107,7 +110,11 @@ class TransactionServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinantialAccount);
+
+        $paymentMethodFinantialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinantialAccount);
+
+
         $payment = $this->getMockBuilder(Payment::class)
                 ->getMockForAbstractClass();
         $payment->setMethod($paymentMethod);
@@ -198,7 +205,17 @@ class TransactionServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinantialAccount);
+
+        $currency = $this->getMockBuilder(Currency::class)
+                ->setMethods(['getId'])
+                ->getMockForAbstractClass();
+        $currency
+                ->method('getId')
+                ->willReturn(1);
+
+        $paymentMethodFinantialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinantialAccount);
+
         $payment = $this->getMockBuilder(Payment::class)
                 ->getMockForAbstractClass();
         $payment->setMethod($paymentMethod);
@@ -216,7 +233,7 @@ class TransactionServiceTest extends BaseTestCase
 
         $transactionService = $this->getTransactionService();
         $amount = 1000;
-        $transaction2 = $transactionService->createSaleOrderPaymentTrx($clientAccount, $paymentDocument, $amount);
+        $transaction2 = $transactionService->createSaleOrderPaymentTrx($clientAccount, $currency, $paymentDocument, $amount);
 
         $this->assertEquals(0, $transaction2->getJournalEntries()[1]->getDebit());
         $this->assertEquals($amount, $transaction2->getJournalEntries()[1]->getCredit());

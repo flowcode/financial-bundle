@@ -60,7 +60,9 @@ class FinanceServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinancialAccount);
+
+        $paymentMethodFinancialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinancialAccount);
 
         $paymentService = $this->getPaymentService();
         $paymentDocumentService = $this->getPaymentDocumentService();
@@ -180,7 +182,18 @@ class FinanceServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinancialAccount);
+
+
+        $currency = $this->getMockBuilder(Currency::class)
+                ->setMethods(['getId'])
+                ->getMockForAbstractClass();
+        $currency
+                ->method('getId')
+                ->willReturn(1);
+
+        $paymentMethodFinancialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinancialAccount);
+
 
         $clientAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
@@ -197,6 +210,8 @@ class FinanceServiceTest extends BaseTestCase
         );
         $amount = 1000;
         $document->setTotal($amount);
+        $document->setCurrency($currency);
+
         $document = $financeService->createSaleOrderPayment($document, $clientAccount, $paymentMethod, $amount);
 
         $this->assertEquals($amount, $document->getTotalPayed());
@@ -237,7 +252,15 @@ class FinanceServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinancialAccount);
+
+        $currency = $this->getMockBuilder(Currency::class)
+                ->setMethods(['getId'])
+                ->getMockForAbstractClass();
+        $currency
+                ->method('getId')
+                ->willReturn(1);
+        $paymentMethodFinancialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinancialAccount);
 
         $clientAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
@@ -255,6 +278,7 @@ class FinanceServiceTest extends BaseTestCase
         $amount = 1000;
         $paymentAmount = 100;
         $document->setTotal($amount);
+        $document->setCurrency($currency);
         $document = $financeService->createSaleOrderPayment($document, $clientAccount, $paymentMethod, $paymentAmount);
 
         $this->assertEquals($paymentAmount, $document->getTotalPayed());
@@ -310,7 +334,9 @@ class FinanceServiceTest extends BaseTestCase
                 ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
                 ->getMockForAbstractClass();
-        $paymentMethod->setAccount($paymentMethodFinancialAccount);
+
+        $paymentMethodFinancialAccount->setCurrency($currency);
+        $paymentMethod->addAccount($paymentMethodFinancialAccount);
 
         $paymentService = $this->getPaymentService();
 

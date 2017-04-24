@@ -13,6 +13,7 @@ use Flowcode\FinancialBundle\Model\Manager\AccountManagerInterface;
 use Flowcode\FinancialBundle\Model\Manager\JournalEntityManagerInterface;
 use Flowcode\FinancialBundle\Model\Core\AccountInterface;
 use Flowcode\FinancialBundle\Model\Currency\CurrencyInterface;
+use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
 
 /**
  * Class TransactionService
@@ -51,6 +52,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryAsset = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
 
         $accountIncome = $this->getAccountIncomeCurrency($income, $currency);
+        $accountPaymentMethod = $this->getAccountPaymentMethodCurrency($paymentDocument->getPayment()->getMethod(), $currency);
         /**
          * @var TransactionInterface $transaction
          */
@@ -59,7 +61,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryIncome->setAccount($accountIncome);
         $journalEntryIncome->setDate(new \DateTime());
         $journalEntryAsset->setDebit($amount);
-        $journalEntryAsset->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
+        $journalEntryAsset->setAccount($accountPaymentMethod);
         $journalEntryAsset->setDate(new \DateTime());
         $paymentDocument->setJournalEntry($journalEntryAsset);
         $transaction->addJournalEntry($journalEntryIncome);
@@ -84,6 +86,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryAsset = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
 
         $accountExpense = $this->getAccountExpenseCurrency($expense, $currency);
+        $accountPaymentMethod = $this->getAccountPaymentMethodCurrency($paymentDocument->getPayment()->getMethod(), $currency);
 
         /**
          * @var TransactionInterface $transaction
@@ -94,7 +97,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryExpense->setDate(new \DateTime());
 
         $journalEntryAsset->setCredit($amount);
-        $journalEntryAsset->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
+        $journalEntryAsset->setAccount($accountPaymentMethod);
         $journalEntryAsset->setDate(new \DateTime());
 
         $transaction->addJournalEntry($journalEntryExpense);
@@ -128,6 +131,7 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryAsset = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
 
         $accountIncome = $this->getAccountIncomeCurrency($income, $currency);
+
         /**
          * @var TransactionInterface $transaction
          */
@@ -155,19 +159,22 @@ class TransactionService implements TransactionManagerInterface
      * @return mixed
      */
     public function createSaleOrderPaymentTrx(
-    AccountInterface $clientAccount, PaymentDocumentInterface $paymentDocument, $amount
+    AccountInterface $clientAccount, CurrencyInterface $currency, PaymentDocumentInterface $paymentDocument, $amount
     )
     {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo Cuenta del cliente que debe
         $journalEntryAsset = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
+
+        $accountPaymentMethod = $this->getAccountPaymentMethodCurrency($paymentDocument->getPayment()->getMethod(), $currency);
+
         /**
          * @var TransactionInterface $transaction
          */
         $transaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         $journalEntryIncome->setDebit($amount);
-        $journalEntryIncome->setAccount($paymentDocument->getPayment()->getMethod()->getAccount());
+        $journalEntryIncome->setAccount($accountPaymentMethod);
         $journalEntryIncome->setDate(new \DateTime());
 
         $paymentDocument->setJournalEntry($journalEntryIncome);
@@ -209,6 +216,21 @@ class TransactionService implements TransactionManagerInterface
             throw new \InvalidArgumentException("account:expense:not:found");
         }
         return $accountExpense;
+    }
+
+    private function getAccountPaymentMethodCurrency(PaymentMethodInterface $paymentMethod, CurrencyInterface $currency)
+    {
+        $accountPaymentMethod = null;
+
+        foreach ($paymentMethod->getAccounts() as $currentAccount) {
+            if ($currentAccount->getCurrency()->getId() == $currency->getId()) {
+                $accountPaymentMethod = $currentAccount;
+            }
+        }
+        if ($accountPaymentMethod == null) {
+            throw new \InvalidArgumentException("account:payment:method:not:found");
+        }
+        return $accountPaymentMethod;
     }
 
 }

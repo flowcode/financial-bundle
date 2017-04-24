@@ -8,10 +8,15 @@ Flowcode\FinancialBundle\Entity\Payment\PaymentMethod:
         name:
             type: string
             length: 255
-    oneToOne:
-        account:
-            targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
-            joinColumn:
-                name: account_id
+    manyToMany:
+        accounts:
+          targetEntity: Flowcode\FinancialBundle\Model\Core\AccountInterface
+          joinTable:
+            name: financial_payment_method_account
+            joinColumns:
+              payment_method_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              account_id:
                 referencedColumnName: id
     lifecycleCallbacks: {  }
