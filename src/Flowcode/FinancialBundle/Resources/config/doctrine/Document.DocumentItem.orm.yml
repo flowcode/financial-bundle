@@ -17,6 +17,9 @@ Flowcode\FinancialBundle\Entity\Document\DocumentItem:
         unitPrice:
             type: float
             nullable: true
+        tax:
+            type: float
+            nullable: true
         total:
             type: float
     manyToOne:
