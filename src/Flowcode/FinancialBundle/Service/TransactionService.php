@@ -60,9 +60,13 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryIncome->setCredit($amount);
         $journalEntryIncome->setAccount($accountIncome);
         $journalEntryIncome->setDate(new \DateTime());
+        $journalEntryIncome->setTransaction($transaction);
+
         $journalEntryAsset->setDebit($amount);
         $journalEntryAsset->setAccount($accountPaymentMethod);
         $journalEntryAsset->setDate(new \DateTime());
+        $journalEntryAsset->setTransaction($transaction);
+
         $paymentDocument->setJournalEntry($journalEntryAsset);
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
@@ -95,10 +99,12 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryExpense->setDebit($amount);
         $journalEntryExpense->setAccount($accountExpense);
         $journalEntryExpense->setDate(new \DateTime());
+        $journalEntryExpense->setTransaction($transaction);
 
         $journalEntryAsset->setCredit($amount);
         $journalEntryAsset->setAccount($accountPaymentMethod);
         $journalEntryAsset->setDate(new \DateTime());
+        $journalEntryAsset->setTransaction($transaction);
 
         $transaction->addJournalEntry($journalEntryExpense);
         $transaction->addJournalEntry($journalEntryAsset);
@@ -139,10 +145,12 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryIncome->setCredit($amount);
         $journalEntryIncome->setAccount($accountIncome);
         $journalEntryIncome->setDate(new \DateTime());
+        $journalEntryIncome->setTransaction($transaction);
 
         $journalEntryAsset->setDebit($amount);
         $journalEntryAsset->setAccount($clientAccount);
         $journalEntryAsset->setDate(new \DateTime());
+        $journalEntryAsset->setTransaction($transaction);
 
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
@@ -176,11 +184,13 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryIncome->setDebit($amount);
         $journalEntryIncome->setAccount($accountPaymentMethod);
         $journalEntryIncome->setDate(new \DateTime());
+        $journalEntryIncome->setTransaction($transaction);
 
         $paymentDocument->setJournalEntry($journalEntryIncome);
         $journalEntryAsset->setCredit($amount);
         $journalEntryAsset->setAccount($clientAccount);
         $journalEntryAsset->setDate(new \DateTime());
+        $journalEntryAsset->setTransaction($transaction);
 
         $transaction->addJournalEntry($journalEntryIncome);
         $transaction->addJournalEntry($journalEntryAsset);
@@ -213,10 +223,12 @@ class TransactionService implements TransactionManagerInterface
         $journalEntryExpense->setDebit($amount);
         $journalEntryExpense->setAccount($clientAccount);
         $journalEntryExpense->setDate(new \DateTime());
+        $journalEntryExpense->setTransaction($transaction);
 
         $journalEntryAsset->setCredit($amount);
         $journalEntryAsset->setAccount($accountPaymentMethod);
         $journalEntryAsset->setDate(new \DateTime());
+        $journalEntryAsset->setTransaction($transaction);
 
         $transaction->addJournalEntry($journalEntryExpense);
         $transaction->addJournalEntry($journalEntryAsset);
@@ -267,6 +279,27 @@ class TransactionService implements TransactionManagerInterface
             throw new \InvalidArgumentException("account:payment:method:not:found");
         }
         return $accountPaymentMethod;
+    }
+
+    public function revertTrx(TransactionInterface $trx)
+    {
+        $revertTransaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
+        foreach ($trx->getJournalEntries() as $journalEntry) {
+            $journalEntryRevert = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
+            $journalEntryRevert->setAccount($journalEntry->getAccount());
+            $journalEntryRevert->setDate(new \DateTime());
+            $journalEntryRevert->setTransaction($revertTransaction);
+            if ($journalEntry->getDebit() > 0) {
+                $journalEntryRevert->setCredit($journalEntry->getDebit());
+            }
+            if ($journalEntry->getCredit() > 0) {
+                $journalEntryRevert->setDebit($journalEntry->getCredit());
+            }
+            $revertTransaction->addJournalEntry($journalEntryRevert);
+        }
+        $revertTransaction->setDate(new \DateTime());
+        $this->updateBalancesByTransaction($revertTransaction);
+        return $revertTransaction;
     }
 
 }

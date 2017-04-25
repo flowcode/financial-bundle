@@ -44,6 +44,7 @@ class FinanceService implements FinanceManagerInterface
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
         $currency = $document->getCurrency();
         $transaction = $this->transactionService->createIncomeTrx($income, $currency, $paymentDocument, $amount);
+        $transaction->setDocument($document);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 
@@ -60,6 +61,7 @@ class FinanceService implements FinanceManagerInterface
         $currency = $document->getCurrency();
 
         $transaction = $this->transactionService->createSaleOrderTrx($income, $currency, $clientAccount, $amount);
+        $transaction->setDocument($document);
         $document->addTransaction($transaction);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
@@ -75,6 +77,7 @@ class FinanceService implements FinanceManagerInterface
         $payment = $this->paymentService->createPayment($paymentMethod, $paymentAmount);
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $paymentAmount);
         $transaction = $this->transactionService->createSaleOrderPaymentTrx($clientAccount, $currency, $paymentDocument, $paymentAmount);
+        $transaction->setDocument($document);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 
@@ -93,6 +96,7 @@ class FinanceService implements FinanceManagerInterface
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
         $currency = $document->getCurrency();
         $transaction = $this->transactionService->createExpenseTrx($expense, $currency, $paymentDocument, $amount);
+        $transaction->setDocument($document);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 
@@ -111,11 +115,22 @@ class FinanceService implements FinanceManagerInterface
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $amount);
         $currency = $document->getCurrency();
         $transaction = $this->transactionService->createExpenseAccountTrx($clientAccount, $currency, $paymentDocument, $amount);
+        $transaction->setDocument($document);
         $document->addTransaction($transaction);
         $document->addPaymentDocument($paymentDocument);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
         $this->documentService->updateDocument($document);
+        return $document;
+    }
+
+    public function cancelDocument(DocumentInterface $document)
+    {
+        foreach ($document->getTransactions() as $transaction) {
+            $transactionReverted = $this->transactionService->revertTrx($transaction);
+            $transactionReverted->setDocument($document);
+            $document->addTransaction($transactionReverted);
+        }
         return $document;
     }
 
