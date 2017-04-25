@@ -5,12 +5,14 @@ namespace Flowcode\FinancialBundle\Entity\Core;
 use Doctrine\Common\Collections\ArrayCollection;
 use Flowcode\FinancialBundle\Model\Core\JournalEntryInterface;
 use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
+use Flowcode\FinancialBundle\Model\Document\DocumentInterface;
 
 /**
  * Transaction
  */
 abstract class Transaction implements TransactionInterface
 {
+
     /**
      * @var int
      */
@@ -114,6 +116,7 @@ abstract class Transaction implements TransactionInterface
 
         return $this;
     }
+
     /**
      * Get journalEntries
      *
@@ -123,4 +126,15 @@ abstract class Transaction implements TransactionInterface
     {
         return $this->journalEntries;
     }
+
+    public function getDocument(): DocumentInterface
+    {
+        return $this->document;
+    }
+
+    public function setDocument(DocumentInterface $document)
+    {
+        $this->document = $document;
+    }
+
 }
