@@ -30,6 +30,10 @@ Flowcode\FinancialBundle\Entity\Document\Document:
             nullable: true
         total:
             type: float
+        subTotal:
+            type: float
+        tax:
+            type: float
         totalPayed:
             type: float
             nullable: true

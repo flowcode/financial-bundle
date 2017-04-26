@@ -71,6 +71,14 @@ abstract class Document implements DocumentInterface
      * @var float
      */
     protected $total;
+    /**
+     * @var float
+     */
+    protected $subTotal;
+    /**
+     * @var float
+     */
+    protected $tax;
 
     /**
      * @var float
@@ -233,7 +241,42 @@ abstract class Document implements DocumentInterface
     {
         return $this->dueDate;
     }
-
+    /**
+    * Get tax
+    * @return float
+    */
+    public function getTax()
+    {
+        return $this->tax;
+    }
+    
+    /**
+    * Set tax
+    * @return $this
+    */
+    public function setTax($tax)
+    {
+        $this->tax = $tax;
+        return $this;
+    }
+    /**
+    * Get subTotal
+    * @return float
+    */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+    
+    /**
+    * Set subTotal
+    * @return $this
+    */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+        return $this;
+    }
     /**
      * Set total
      *
