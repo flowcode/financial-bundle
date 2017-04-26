@@ -15,12 +15,12 @@ abstract class PaymentMethod implements PaymentMethodInterface
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
     protected $accounts;
 
     public function __construct()

@@ -10,17 +10,17 @@ abstract class DocumentCategory
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
 
     /**
