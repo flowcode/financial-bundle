@@ -101,6 +101,7 @@ abstract class Document implements DocumentInterface
     {
         $this->transactions = new ArrayCollection();
         $this->paymentsDocuments = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     /**

@@ -32,7 +32,7 @@ abstract class DocumentItem
     /**
      * @var TaxInterface
      */
-    protected $taxs;
+    protected $tax;
 
     /**
      * @var float
@@ -152,6 +152,24 @@ abstract class DocumentItem
         return $this->total;
     }
 
+    /**
+    * Get tax
+    * @return float
+    */
+    public function getTax()
+    {
+        return $this->tax;
+    }
+    
+    /**
+    * Set tax
+    * @return $this
+    */
+    public function setTax($tax)
+    {
+        $this->tax = $tax;
+        return $this;
+    }
     /**
      * @return DocumentInterface
      */
