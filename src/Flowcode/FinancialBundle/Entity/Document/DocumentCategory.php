@@ -7,6 +7,7 @@ namespace Flowcode\FinancialBundle\Entity\Document;
  */
 abstract class DocumentCategory
 {
+
     /**
      * @var int
      */
@@ -16,12 +17,6 @@ abstract class DocumentCategory
      * @var string
      */
     protected $name;
-
-    /**
-     * @var string
-     */
-    protected $code;
-
 
     /**
      * Get id
@@ -57,27 +52,4 @@ abstract class DocumentCategory
         return $this->name;
     }
 
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return DocumentCategory
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
 }

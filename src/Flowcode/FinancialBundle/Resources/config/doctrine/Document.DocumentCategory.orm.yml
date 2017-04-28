@@ -10,8 +10,4 @@ Flowcode\FinancialBundle\Entity\Document\DocumentCategory:
         name:
             type: string
             length: 255
-        code:
-            type: string
-            length: 255
-            nullable: true
     lifecycleCallbacks: {  }
