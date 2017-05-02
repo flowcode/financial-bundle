@@ -17,8 +17,7 @@ use Flowcode\FinancialBundle\Entity\Payment\Payment;
 /**
  * Class FinanceService
  */
-class FinanceService implements FinanceManagerInterface
-{
+class FinanceService implements FinanceManagerInterface {
 
     private $transactionService;
     private $documentService;
@@ -26,8 +25,7 @@ class FinanceService implements FinanceManagerInterface
 
     public function __construct(
     TransactionManagerInterface $transactionService, DocumentManagerInterface $documentService, PaymentManagerInterface $paymentService, PaymentDocumentManagerInterface $paymentDocumentService
-    )
-    {
+    ) {
         $this->transactionService = $transactionService;
         $this->documentService = $documentService;
         $this->paymentService = $paymentService;
@@ -36,8 +34,7 @@ class FinanceService implements FinanceManagerInterface
 
     public function createInstantSale(
     DocumentInterface $document, IncomeInterface $income, PaymentMethodInterface $paymentMethod
-    )
-    {
+    ) {
         $amount = $document->getTotal();
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
         $payment->setType(Payment::TYPE_INCOME);
@@ -46,6 +43,7 @@ class FinanceService implements FinanceManagerInterface
         $transaction = $this->transactionService->createIncomeTrx($income, $currency, $paymentDocument, $amount);
         $transaction->setDocument($document);
         $document->addTransaction($transaction);
+        $paymentDocument->setDocument($document);
         $document->addPaymentDocument($paymentDocument);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
@@ -55,8 +53,7 @@ class FinanceService implements FinanceManagerInterface
 
     public function createSaleOrder(
     DocumentInterface $document, IncomeInterface $income, AccountInterface $clientAccount
-    )
-    {
+    ) {
         $amount = $document->getTotal();
         $currency = $document->getCurrency();
 
@@ -70,15 +67,17 @@ class FinanceService implements FinanceManagerInterface
 
     public function createSaleOrderPayment(
     DocumentInterface $document, AccountInterface $clientAccount, PaymentMethodInterface $paymentMethod, $paymentAmount
-    )
-    {
+    ) {
         $currency = $document->getCurrency();
 
         $payment = $this->paymentService->createPayment($paymentMethod, $paymentAmount);
+        $payment->setType(Payment::TYPE_INCOME);
         $paymentDocument = $this->paymentDocumentService->createPaymentDocumentForPayment($payment, $paymentAmount);
         $transaction = $this->transactionService->createSaleOrderPaymentTrx($clientAccount, $currency, $paymentDocument, $paymentAmount);
         $transaction->setDocument($document);
         $document->addTransaction($transaction);
+        $paymentDocument->setDocument($document);
+
         $document->addPaymentDocument($paymentDocument);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
@@ -88,8 +87,7 @@ class FinanceService implements FinanceManagerInterface
 
     public function createInstantExpense(
     DocumentInterface $document, ExpenseInterface $expense, PaymentMethodInterface $paymentMethod
-    )
-    {
+    ) {
         $amount = $document->getTotal();
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
         $payment->setType(Payment::TYPE_EXPENSE);
@@ -98,6 +96,7 @@ class FinanceService implements FinanceManagerInterface
         $transaction = $this->transactionService->createExpenseTrx($expense, $currency, $paymentDocument, $amount);
         $transaction->setDocument($document);
         $document->addTransaction($transaction);
+        $paymentDocument->setDocument($document);
         $document->addPaymentDocument($paymentDocument);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
@@ -107,8 +106,7 @@ class FinanceService implements FinanceManagerInterface
 
     public function createExpenseAccount(
     DocumentInterface $document, AccountInterface $clientAccount, PaymentMethodInterface $paymentMethod
-    )
-    {
+    ) {
         $amount = $document->getTotal();
         $payment = $this->paymentService->createPayment($paymentMethod, $amount);
         $payment->setType(Payment::TYPE_EXPENSE);
@@ -117,6 +115,7 @@ class FinanceService implements FinanceManagerInterface
         $transaction = $this->transactionService->createExpenseAccountTrx($clientAccount, $currency, $paymentDocument, $amount);
         $transaction->setDocument($document);
         $document->addTransaction($transaction);
+        $paymentDocument->setDocument($document);
         $document->addPaymentDocument($paymentDocument);
 
         $this->transactionService->updateBalancesByTransaction($transaction);
@@ -124,8 +123,7 @@ class FinanceService implements FinanceManagerInterface
         return $document;
     }
 
-    public function cancelDocument(DocumentInterface $document)
-    {
+    public function cancelDocument(DocumentInterface $document) {
         foreach ($document->getTransactions() as $transaction) {
             $transactionReverted = $this->transactionService->revertTrx($transaction);
             $transactionReverted->setDocument($document);

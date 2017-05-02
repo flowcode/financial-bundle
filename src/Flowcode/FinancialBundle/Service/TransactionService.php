@@ -18,8 +18,7 @@ use Flowcode\FinancialBundle\Model\Payment\PaymentMethodInterface;
 /**
  * Class TransactionService
  */
-class TransactionService implements TransactionManagerInterface
-{
+class TransactionService implements TransactionManagerInterface {
 
     /**
      * @var InstanceManagerInterface
@@ -28,8 +27,7 @@ class TransactionService implements TransactionManagerInterface
 
     public function __construct(
     InstanceManagerInterface $instanceService, AccountManagerInterface $accountService, JournalEntityManagerInterface $journalEntityService
-    )
-    {
+    ) {
         $this->instanceService = $instanceService;
         $this->accountService = $accountService;
         $this->journalEntityService = $journalEntityService;
@@ -44,8 +42,7 @@ class TransactionService implements TransactionManagerInterface
      */
     public function createIncomeTrx(
     IncomeInterface $income, CurrencyInterface $currency, PaymentDocumentInterface $paymentDocument, $amount
-    )
-    {
+    ) {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
@@ -82,8 +79,7 @@ class TransactionService implements TransactionManagerInterface
      */
     public function createExpenseTrx(
     ExpenseInterface $expense, CurrencyInterface $currency, PaymentDocumentInterface $paymentDocument, $amount
-    )
-    {
+    ) {
         //Egreso
         $journalEntryExpense = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
@@ -113,8 +109,7 @@ class TransactionService implements TransactionManagerInterface
         return $transaction;
     }
 
-    public function updateBalancesByTransaction(TransactionInterface $transaction)
-    {
+    public function updateBalancesByTransaction(TransactionInterface $transaction) {
         foreach ($transaction->getJournalEntries() as $journal) {
             $this->journalEntityService->updateBalance($journal);
         }
@@ -129,8 +124,7 @@ class TransactionService implements TransactionManagerInterface
      */
     public function createSaleOrderTrx(
     IncomeInterface $income, CurrencyInterface $currency, AccountInterface $clientAccount, $amount
-    )
-    {
+    ) {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo Cuenta del cliente que debe
@@ -168,8 +162,7 @@ class TransactionService implements TransactionManagerInterface
      */
     public function createSaleOrderPaymentTrx(
     AccountInterface $clientAccount, CurrencyInterface $currency, PaymentDocumentInterface $paymentDocument, $amount
-    )
-    {
+    ) {
         //Ingreso
         $journalEntryIncome = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo Cuenta del cliente que debe
@@ -207,8 +200,7 @@ class TransactionService implements TransactionManagerInterface
      */
     public function createExpenseAccountTrx(
     AccountInterface $clientAccount, CurrencyInterface $currency, PaymentDocumentInterface $paymentDocument, $amount
-    )
-    {
+    ) {
         //Egreso
         $journalEntryExpense = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
         //Activo
@@ -237,8 +229,7 @@ class TransactionService implements TransactionManagerInterface
         return $transaction;
     }
 
-    private function getAccountIncomeCurrency(IncomeInterface $income, CurrencyInterface $currency)
-    {
+    private function getAccountIncomeCurrency(IncomeInterface $income, CurrencyInterface $currency) {
         $accountIncome = null;
         foreach ($income->getAccounts() as $currentAccount) {
             if ($currentAccount->getCurrency()->getId() == $currency->getId()) {
@@ -251,8 +242,7 @@ class TransactionService implements TransactionManagerInterface
         return $accountIncome;
     }
 
-    private function getAccountExpenseCurrency(ExpenseInterface $expense, CurrencyInterface $currency)
-    {
+    private function getAccountExpenseCurrency(ExpenseInterface $expense, CurrencyInterface $currency) {
         $accountExpense = null;
 
         foreach ($expense->getAccounts() as $currentAccount) {
@@ -266,8 +256,7 @@ class TransactionService implements TransactionManagerInterface
         return $accountExpense;
     }
 
-    private function getAccountPaymentMethodCurrency(PaymentMethodInterface $paymentMethod, CurrencyInterface $currency)
-    {
+    private function getAccountPaymentMethodCurrency(PaymentMethodInterface $paymentMethod, CurrencyInterface $currency) {
         $accountPaymentMethod = null;
 
         foreach ($paymentMethod->getAccounts() as $currentAccount) {
@@ -281,8 +270,7 @@ class TransactionService implements TransactionManagerInterface
         return $accountPaymentMethod;
     }
 
-    public function revertTrx(TransactionInterface $trx)
-    {
+    public function revertTrx(TransactionInterface $trx) {
         $revertTransaction = $this->instanceService->getInstanceFromInterface(TransactionInterface::class);
         foreach ($trx->getJournalEntries() as $journalEntry) {
             $journalEntryRevert = $this->instanceService->getInstanceFromInterface(JournalEntryInterface::class);
