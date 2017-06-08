@@ -1,11 +1,12 @@
 <?php
 namespace Flowcode\FinancialBundle\Repository\Core;
 
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Flowcode\FinancialBundle\Repository\TransactionRepository
  */
-class TransactionRepository extends \Doctrine\ORM\EntityRepository
+class TransactionRepository extends EntityRepository
 {
     public function getByDocument($documentId)
     {
