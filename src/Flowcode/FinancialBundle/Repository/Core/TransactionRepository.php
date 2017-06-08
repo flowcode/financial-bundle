@@ -1,14 +1,12 @@
 <?php
 namespace Flowcode\FinancialBundle\Repository\Core;
 
-use Doctrine\ORM\EntityRepository;
 
 /**
  * Flowcode\FinancialBundle\Repository\TransactionRepository
  */
-class TransactionRepository extends EntityRepository
+class TransactionRepository extends \Doctrine\ORM\EntityRepository
 {
-
     public function getByDocument($documentId)
     {
         $qb = $this->createQueryBuilder("t");
