@@ -1,5 +1,4 @@
 <?php
-
 namespace Flowcode\FinancialBundle\Tests\Service;
 
 use Flowcode\FinancialBundle\Tests\BaseTestCase;
@@ -27,6 +26,7 @@ use Flowcode\FinancialBundle\Model\Payment\PaymentInterface;
 use Flowcode\FinancialBundle\Model\Payment\PaymentDocumentInterface;
 use Flowcode\FinancialBundle\Model\Core\TransactionInterface;
 use Flowcode\FinancialBundle\Tests\Mocks\DocumentMock;
+use Flowcode\FinancialBundle\Repository\Core\TransactionRepository;
 
 class FinanceServiceTest extends BaseTestCase
 {
@@ -44,22 +44,22 @@ class FinanceServiceTest extends BaseTestCase
     {
         $document = new DocumentMock();
         $income = $this->getMockBuilder(Income::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $incomeFinantialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $currency = $this->getMockBuilder(Currency::class)
-                ->setMethods(['getId'])
-                ->getMockForAbstractClass();
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $currency
-                ->method('getId')
-                ->willReturn(1);
+            ->method('getId')
+            ->willReturn(1);
         $incomeFinantialAccount->setCurrency($currency);
         $income->addAccount($incomeFinantialAccount);
 
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $paymentMethodFinancialAccount->setCurrency($currency);
         $paymentMethod->addAccount($paymentMethodFinancialAccount);
@@ -68,12 +68,17 @@ class FinanceServiceTest extends BaseTestCase
         $paymentDocumentService = $this->getPaymentDocumentService();
 
         $documentService = $this->getMockBuilder(DocumentService::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $transactionService = $this->getTransactionService();
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+
+        $transactionRepository = $this->getMockBuilder(TransactionRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $financeService = new FinanceService(
-                $transactionService, $documentService, $paymentService, $paymentDocumentService
+            $transactionService, $documentService, $paymentService, $paymentDocumentService, $transactionRepository
         );
         $amount = 1000;
         $document->setCurrency($currency);
@@ -116,31 +121,36 @@ class FinanceServiceTest extends BaseTestCase
     {
         $document = new DocumentMock();
         $income = $this->getMockBuilder(Income::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $incomeFinantialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $currency = $this->getMockBuilder(Currency::class)
-                ->setMethods(['getId'])
-                ->getMockForAbstractClass();
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $currency
-                ->method('getId')
-                ->willReturn(1);
+            ->method('getId')
+            ->willReturn(1);
         $incomeFinantialAccount->setCurrency($currency);
         $income->addAccount($incomeFinantialAccount);
 
         $clientAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentService = $this->getPaymentService();
         $paymentDocumentService = $this->getPaymentDocumentService();
         $documentService = $this->getMockBuilder(DocumentService::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+
+        $transactionRepository = $this->getMockBuilder(TransactionRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $financeService = new FinanceService(
-                $transactionService, $documentService, $paymentService, $paymentDocumentService
+            $transactionService, $documentService, $paymentService, $paymentDocumentService, $transactionRepository
         );
         $amount = 1000;
         $document->setCurrency($currency);
@@ -179,34 +189,39 @@ class FinanceServiceTest extends BaseTestCase
     {
         $document = new DocumentMock();
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
 
         $currency = $this->getMockBuilder(Currency::class)
-                ->setMethods(['getId'])
-                ->getMockForAbstractClass();
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $currency
-                ->method('getId')
-                ->willReturn(1);
+            ->method('getId')
+            ->willReturn(1);
 
         $paymentMethodFinancialAccount->setCurrency($currency);
         $paymentMethod->addAccount($paymentMethodFinancialAccount);
 
 
         $clientAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentService = $this->getPaymentService();
         $paymentDocumentService = $this->getPaymentDocumentService();
         $documentService = $this->getMockBuilder(DocumentService::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+
+        $transactionRepository = $this->getMockBuilder(TransactionRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $financeService = new FinanceService(
-                $transactionService, $documentService, $paymentService, $paymentDocumentService
+            $transactionService, $documentService, $paymentService, $paymentDocumentService, $transactionRepository
         );
         $amount = 1000;
         $document->setTotal($amount);
@@ -249,31 +264,37 @@ class FinanceServiceTest extends BaseTestCase
     {
         $document = new DocumentMock();
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $currency = $this->getMockBuilder(Currency::class)
-                ->setMethods(['getId'])
-                ->getMockForAbstractClass();
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $currency
-                ->method('getId')
-                ->willReturn(1);
+            ->method('getId')
+            ->willReturn(1);
         $paymentMethodFinancialAccount->setCurrency($currency);
         $paymentMethod->addAccount($paymentMethodFinancialAccount);
 
         $clientAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentService = $this->getPaymentService();
         $paymentDocumentService = $this->getPaymentDocumentService();
         $documentService = $this->getMockBuilder(DocumentService::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
+
+
+        $transactionRepository = $this->getMockBuilder(TransactionRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $financeService = new FinanceService(
-                $transactionService, $documentService, $paymentService, $paymentDocumentService
+            $transactionService, $documentService, $paymentService, $paymentDocumentService, $transactionRepository
         );
         $amount = 1000;
         $paymentAmount = 100;
@@ -317,24 +338,24 @@ class FinanceServiceTest extends BaseTestCase
     {
         $document = new DocumentMock();
         $expense = $this->getMockBuilder(Expense::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $expenseFinantialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
 
         $currency = $this->getMockBuilder(Currency::class)
-                ->setMethods(['getId'])
-                ->getMockForAbstractClass();
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $currency
-                ->method('getId')
-                ->willReturn(1);
+            ->method('getId')
+            ->willReturn(1);
         $expenseFinantialAccount->setCurrency($currency);
         $expense->addAccount($expenseFinantialAccount);
 
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $paymentMethodFinancialAccount->setCurrency($currency);
         $paymentMethod->addAccount($paymentMethodFinancialAccount);
@@ -342,14 +363,20 @@ class FinanceServiceTest extends BaseTestCase
         $paymentService = $this->getPaymentService();
 
         $documentService = $this->getMockBuilder(DocumentService::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
         $paymentDocumentService = $this->getPaymentDocumentService();
+
+
+        $transactionRepository = $this->getMockBuilder(TransactionRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $financeService = new FinanceService(
-                $transactionService, $documentService, $paymentService, $paymentDocumentService
+            $transactionService, $documentService, $paymentService, $paymentDocumentService, $transactionRepository
         );
         $amount = 1000;
         $document->setCurrency($currency);
@@ -390,20 +417,20 @@ class FinanceServiceTest extends BaseTestCase
     {
         $document = new DocumentMock();
         $clientFinantialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $currency = $this->getMockBuilder(Currency::class)
-                ->setMethods(['getId'])
-                ->getMockForAbstractClass();
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $currency
-                ->method('getId')
-                ->willReturn(1);
+            ->method('getId')
+            ->willReturn(1);
         $clientFinantialAccount->setCurrency($currency);
 
         $paymentMethod = $this->getMockBuilder(PaymentMethod::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $paymentMethodFinancialAccount = $this->getMockBuilder(Account::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $paymentMethodFinancialAccount->setCurrency($currency);
         $paymentMethod->addAccount($paymentMethodFinancialAccount);
@@ -411,14 +438,20 @@ class FinanceServiceTest extends BaseTestCase
         $paymentService = $this->getPaymentService();
 
         $documentService = $this->getMockBuilder(DocumentService::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $transactionService = $this->getTransactionService();
         $this->journalEntityManagerInterface->expects($this->exactly(2))->method('updateBalance');
         $paymentDocumentService = $this->getPaymentDocumentService();
+
+        $transactionRepository = $this->getMockBuilder(TransactionRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
         $financeService = new FinanceService(
-                $transactionService, $documentService, $paymentService, $paymentDocumentService
+            $transactionService, $documentService, $paymentService, $paymentDocumentService, $transactionRepository
         );
         $amount = 1000;
         $document->setCurrency($currency);
@@ -448,76 +481,74 @@ class FinanceServiceTest extends BaseTestCase
     private function getTransactionService()
     {
         $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->accountManagerInterface = $this->getMockBuilder(AccountService::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->journalEntityManagerInterface = $this->getMockBuilder(JournalEntityService::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $callBack = $this->getMockCallbackForGetInstanceFromInterface();
         $instanceManagerInterface
-                ->method('getInstanceFromInterface')
-                ->will($this->returnCallback($callBack));
+            ->method('getInstanceFromInterface')
+            ->will($this->returnCallback($callBack));
         return new TransactionService($instanceManagerInterface, $this->accountManagerInterface, $this->journalEntityManagerInterface);
     }
 
     private function getPaymentService()
     {
         $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $callBack = $this->getMockCallbackForGetInstanceFromInterface();
         $instanceManagerInterface
-                ->method('getInstanceFromInterface')
-                ->will($this->returnCallback($callBack));
+            ->method('getInstanceFromInterface')
+            ->will($this->returnCallback($callBack));
         return new PaymentService($instanceManagerInterface);
     }
 
     private function getPaymentDocumentService()
     {
         $instanceManagerInterface = $this->getMockBuilder(InstanceService::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $callBack = $this->getMockCallbackForGetInstanceFromInterface();
         $instanceManagerInterface
-                ->method('getInstanceFromInterface')
-                ->will($this->returnCallback($callBack));
+            ->method('getInstanceFromInterface')
+            ->will($this->returnCallback($callBack));
         return new PaymentDocumentService($instanceManagerInterface);
     }
 
     private function getMockCallbackForGetInstanceFromInterface()
     {
         return (
-                function ($class)
-                {
-                    $entity = null;
-                    switch ($class) {
-                        case PaymentInterface::class:
-                            $entity = $this->getMockBuilder(Payment::class)
-                                    ->getMockForAbstractClass();
-                            break;
-                        case JournalEntryInterface::class:
-                            $entity = $this->getMockBuilder(JournalEntry::class)
-                                    ->getMockForAbstractClass();
-                            break;
-                        case TransactionInterface::class:
-                            $entity = $this->getMockBuilder(Transaction::class)
-                                    ->getMockForAbstractClass();
-                            break;
-                        case PaymentDocumentInterface::class:
-                            $entity = $this->getMockBuilder(PaymentDocument::class)
-                                    ->getMockForAbstractClass();
-                            break;
-                        default:
-                            $entity = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Core\Transaction')
-                                    ->getMockForAbstractClass();
-                            break;
-                    }
-                    return $entity;
+            function ($class) {
+                $entity = null;
+                switch ($class) {
+                    case PaymentInterface::class:
+                        $entity = $this->getMockBuilder(Payment::class)
+                            ->getMockForAbstractClass();
+                        break;
+                    case JournalEntryInterface::class:
+                        $entity = $this->getMockBuilder(JournalEntry::class)
+                            ->getMockForAbstractClass();
+                        break;
+                    case TransactionInterface::class:
+                        $entity = $this->getMockBuilder(Transaction::class)
+                            ->getMockForAbstractClass();
+                        break;
+                    case PaymentDocumentInterface::class:
+                        $entity = $this->getMockBuilder(PaymentDocument::class)
+                            ->getMockForAbstractClass();
+                        break;
+                    default:
+                        $entity = $this->getMockBuilder('Flowcode\FinancialBundle\Entity\Core\Transaction')
+                            ->getMockForAbstractClass();
+                        break;
                 }
-                );
+                return $entity;
+            }
+            );
     }
-
 }
