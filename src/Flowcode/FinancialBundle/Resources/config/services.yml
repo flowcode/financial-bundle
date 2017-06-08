@@ -14,14 +14,20 @@ services:
     ffb.document:
         class:        Flowcode\FinancialBundle\Service\DocumentService
         arguments: ["@ffb.transaction"]
+    ffb.repository.transaction:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - Flowcode\FinancialBundle\Model\Core\TransactionInterface
     ffb.finance:
         class:        Flowcode\FinancialBundle\Service\FinanceService
-        arguments: ["@ffb.transaction", "@ffb.document", "@ffb.payment", "@ffb.paymentdocument"]
+        arguments: ["@ffb.transaction", "@ffb.document", "@ffb.payment", "@ffb.paymentdocument", "@ffb.repository.transaction"]
     ffb.repository.journalentry:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - Flowcode\FinancialBundle\Model\Core\JournalEntryInterface
+
     ffb.account:
         class:        Flowcode\FinancialBundle\Service\AccountService
         arguments: ["@ffb.repository.journalentry"]
